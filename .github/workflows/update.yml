@@ -1,0 +1,94 @@
+name: イベントデータの更新（試験）
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Ollama のモデル"
+        default: "qwen3:8b"
+        required: true
+      only:
+        description: "一部のサイトだけ（カンマ区切り。空なら全部）例: mitsukoshi,morisanho"
+        default: ""
+        required: false
+  # 試験がうまくいったら、下の2行の # を外すと毎週日曜 5:48（日本時間）に自動で動く
+  # schedule:
+  #   - cron: "48 20 * * 6"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      OLLAMA_MODEL: ${{ inputs.model || 'qwen3:8b' }}
+      OLLAMA_MODELS: ${{ github.workspace }}/../ollama-models
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Python の部品を入れる
+        run: pip install -r requirements.txt
+
+      - name: モデルのキャッシュ
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/../ollama-models
+          key: ollama-${{ env.OLLAMA_MODEL }}
+
+      - name: Ollama を入れて起動する
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          sudo systemctl stop ollama 2>/dev/null || true
+          mkdir -p "$OLLAMA_MODELS"
+          nohup ollama serve > ollama.log 2>&1 &
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:11434/api/tags >/dev/null && break; sleep 2; done
+          ollama --version
+
+      - name: モデルを用意する
+        run: |
+          start=$(date +%s)
+          ollama pull "$OLLAMA_MODEL"
+          echo "モデルの用意: $(( $(date +%s) - start )) 秒" | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 更新する
+        env:
+          ONLY: ${{ inputs.only }}
+        run: |
+          if [ -n "$ONLY" ]; then
+            python updater/run.py --only "$ONLY"
+          else
+            python updater/run.py
+          fi
+
+      - name: 記録を残す
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: |
+            ollama.log
+            data/last_run.md
+
+      - name: 変わっていれば保存して公開する
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add data docs/events.json
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "events.json を更新（$(TZ=Asia/Tokyo date +%F)・試験）"
+            git push
+          fi

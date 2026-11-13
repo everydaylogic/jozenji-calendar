@@ -1,0 +1,107 @@
+{
+ "color": "#d6336c",
+ "events": [
+  {
+   "title": "第58回三越の京都銘品会大京都展",
+   "date_start": "2026-11-01",
+   "date_end": "2026-11-03",
+   "time": "",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+   "note": "催物ご案内（11月）より",
+   "manual": true,
+   "pdf_month": "2026-11",
+   "is_new": true
+  },
+  {
+   "title": "ヴィンテージのある暮らし",
+   "date_start": "2026-11-05",
+   "date_end": "2026-11-09",
+   "time": "",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+   "note": "催物ご案内（11月）より",
+   "manual": true,
+   "pdf_month": "2026-11",
+   "is_new": false
+  },
+  {
+   "title": "2026 仙台三越のお歳暮・冬のギフト",
+   "date_start": "2026-11-11",
+   "date_end": "2026-12-20",
+   "time": "最終日は16:00まで",
+   "venue": "仙台三越 本館7階 ギフトお届け承りセンターおよび各小型店",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/shops/other/other_shopnews/shopnews03/shopnews25.html",
+   "note": "",
+   "is_new": false
+  },
+  {
+   "title": "ムートンファブリックバザール",
+   "date_start": "2026-11-11",
+   "date_end": "2026-11-16",
+   "time": "",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+   "note": "催物ご案内（11月）より",
+   "manual": true,
+   "pdf_month": "2026-11",
+   "is_new": false
+  },
+  {
+   "title": "レディスアデランス「ウィッグ」ご試着体験フェア",
+   "date_start": "2026-11-11",
+   "date_end": "2026-11-16",
+   "time": "",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+   "note": "催物ご案内（11月）より",
+   "manual": true,
+   "pdf_month": "2026-11",
+   "is_new": false
+  },
+  {
+   "title": "冬の婦人服ファッションバザール",
+   "date_start": "2026-11-18",
+   "date_end": "2026-11-23",
+   "time": "最終日は17:00まで",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/shops/other/other_shopnews/sale/shopnews010111.html",
+   "note": "",
+   "is_new": false
+  },
+  {
+   "title": "世界遺産高野山金剛峯寺襖絵奉納記念福王寺一彦展",
+   "date_start": "2026-11-25",
+   "date_end": "2026-11-30",
+   "time": "",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+   "note": "催物ご案内（11月）より。翌月以降の会期は翌月の案内で確認",
+   "manual": true,
+   "pdf_month": "2026-11",
+   "is_new": true
+  },
+  {
+   "title": "近代巨匠陶芸展",
+   "date_start": "2026-11-25",
+   "date_end": "2026-11-30",
+   "time": "",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+   "note": "催物ご案内（11月）より。翌月以降の会期は翌月の案内で確認",
+   "manual": true,
+   "pdf_month": "2026-11",
+   "is_new": false
+  }
+ ],
+ "fetched_at": "2026-11-13T17:27:58+09:00",
+ "kind": "mitsukoshi_json",
+ "last_ok_at": "2026-11-13T17:27:58+09:00",
+ "manual_month": "2026-11",
+ "message": "",
+ "name": "仙台三越 催物場",
+ "ok": true,
+ "order": 3,
+ "url": "https://www.mitsukoshi.mistore.jp/sendai/event_calendar.html",
+ "venue": "仙台三越"
+}
