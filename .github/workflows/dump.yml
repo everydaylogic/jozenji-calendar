@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   dump:
@@ -18,7 +18,14 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python updater/dump.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dump
-          path: dump/
+      - name: dump ブランチに保存
+        run: |
+          mkdir -p /tmp/out && cp -r dump /tmp/out/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan dump
+          git rm -rfq .
+          cp -r /tmp/out/dump .
+          git add dump
+          git commit -qm "ページの保存（調査用）"
+          git push -f origin dump
