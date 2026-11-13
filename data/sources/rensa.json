@@ -2,349 +2,319 @@
  "color": "#7b3fbf",
  "events": [
   {
-   "date_end": "",
+   "title": "Fear, and Loathing in Las Vegas",
    "date_start": "2026-11-01",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "17:00 / 18:00",
-   "title": "Fear, and Loathing in Las Vegas / The Focus「Feeling of Unity」Vol.1",
+   "date_end": "",
+   "time": "OPEN/START 17:00 / 18:00",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3302",
-   "venue": "Rensa"
+   "note": "INFO GIP",
+   "is_new": false
   },
   {
-   "date_end": "",
+   "title": "パジャマライブ",
    "date_start": "2026-11-05",
-   "is_new": false,
-   "note": "INFO NeW sTyle entertainment",
-   "time": "18:00 / 18:30",
-   "title": "NeW sTyle / パジャマライブ",
+   "date_end": "",
+   "time": "OPEN/START 18:00 / 18:30",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3376",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-06",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "17:15 / 18:00",
-   "title": "MA55IVE THE RAMPAGE / 3rd LIVE TOUR 2026 \"M5V\" ～DEPARTURE～",
-   "url": "http://www.rensa.jp/schedule_more/?index=3330",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-07",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "17:15 / 18:00",
-   "title": "reGretGirl / ONEMAN TOUR 2026-2027 \"Fall in LOVE\"",
-   "url": "http://www.rensa.jp/schedule_more/?index=3331",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-08",
-   "is_new": false,
-   "note": "INFO キョードー東北",
-   "time": "17:00 / 18:00",
-   "title": "Penthouse / ONE MAN LIVE HOUSE TOUR 2026 “Blinking Gate”",
-   "url": "http://www.rensa.jp/schedule_more/?index=3319",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-11",
-   "is_new": false,
-   "note": "INFO RINDO Entertainment",
-   "time": "① 12:00 / 12:45 ② 16:30 / 17:15",
-   "title": "XP!A / ピアステ#87〜わんわん犬耳公演〜",
-   "url": "http://www.rensa.jp/schedule_more/?index=3375",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-12",
-   "is_new": false,
-   "note": "INFO ノースロードミュージック仙台",
-   "time": "18:15 / 19:00",
-   "title": "syrup16g / Tour 2026 ”Canon Feel”",
-   "url": "http://www.rensa.jp/schedule_more/?index=3368",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-13",
-   "is_new": false,
-   "note": "INFO ノースロードミュージック仙台",
-   "time": "18:00 / 19:00",
-   "title": "SHANK / ”THE TOUR 2026”",
-   "url": "http://www.rensa.jp/schedule_more/?index=3284",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-14",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "16:15 / 17:00",
-   "title": "秋山黄色 / LIVE TOUR 2026(タイトル仮)",
-   "url": "http://www.rensa.jp/schedule_more/?index=3283",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-15",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "16:30 / 17:00",
-   "title": "eastern youth / 全国巡業公演 ~ファイトバック現代 2026~",
-   "url": "http://www.rensa.jp/schedule_more/?index=3304",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-16",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "18:00 / 19:00",
-   "title": "人間椅子 / 還暦記念ツアー『猟奇覚醒』",
-   "url": "http://www.rensa.jp/schedule_more/?index=3338",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-17",
-   "is_new": false,
    "note": "INFO NeW sTyle entertainment",
-   "time": "18:00 / 18:30",
-   "title": "NeW sTyle / ニュースタ FREE LIVE",
-   "url": "http://www.rensa.jp/schedule_more/?index=3377",
-   "venue": "Rensa"
+   "is_new": false
   },
   {
+   "title": "MA55IVE THE RAMPAGE 3rd LIVE TOUR 2026 \"M5V\" ～DEPARTURE～",
+   "date_start": "2026-11-06",
    "date_end": "",
-   "date_start": "2026-11-20",
-   "is_new": true,
+   "time": "OPEN/START 17:15 / 18:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3330",
    "note": "INFO GIP",
-   "time": "17:30 / 18:30",
-   "title": "ポルカドットスティングレイ / ポルフェス126 ポルカドットスティングレイ 2026冬ツアー（仮）",
-   "url": "http://www.rensa.jp/schedule_more/?index=3324",
-   "venue": "Rensa"
+   "is_new": false
   },
   {
+   "title": "reGretGirl ONEMAN TOUR 2026-2027 \"Fall in LOVE\"",
+   "date_start": "2026-11-07",
    "date_end": "",
-   "date_start": "2026-11-22",
-   "is_new": false,
+   "time": "OPEN/START 17:15 / 18:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3331",
    "note": "INFO GIP",
-   "time": "16:45 / 17:30",
-   "title": "超能力戦士ドリアン / ワンマンライブツアー ドキドキ異世界ファンタジー",
-   "url": "http://www.rensa.jp/schedule_more/?index=3328",
-   "venue": "Rensa"
+   "is_new": false
   },
   {
+   "title": "Penthouse ONE MAN LIVE HOUSE TOUR 2026 “Blinking Gate”",
+   "date_start": "2026-11-08",
    "date_end": "",
-   "date_start": "2026-11-23",
-   "is_new": false,
-   "note": "INFO EDWARD LIVE",
-   "time": "16:15 / 17:00",
-   "title": "DEZERT / 15th ANNIVERSARY LIVE HOUSE TOUR 2026 \"生きてゆこうね\"",
-   "url": "http://www.rensa.jp/schedule_more/?index=3359",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-27",
-   "is_new": true,
-   "note": "INFO GIP",
-   "time": "18:30 / 19:00",
-   "title": "cinema staff 【8/29 振替公演】 / 前衛懐古主義 part 5",
-   "url": "http://www.rensa.jp/schedule_more/?index=3343",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-11-28",
-   "is_new": true,
-   "note": "INFO GIP",
-   "time": "16:15 / 17:00",
-   "title": "花冷え。 / 2MAN TOUR 2026",
-   "url": "http://www.rensa.jp/schedule_more/?index=3332",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-12-03",
-   "is_new": false,
+   "time": "OPEN/START 17:00 / 18:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3319",
    "note": "INFO キョードー東北",
-   "time": "18:00 / 18:30",
-   "title": "KIRITO / Tour 2026-2027「OVERRIDE」",
-   "url": "http://www.rensa.jp/schedule_more/?index=3345",
-   "venue": "Rensa"
+   "is_new": false
   },
   {
+   "title": "ピアステ#87〜わんわん犬耳公演〜",
+   "date_start": "2026-11-11",
    "date_end": "",
-   "date_start": "2026-12-05",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "17:15 / 18:00",
-   "title": "山中さわお & ELPIS / 10/11 JOINT LIVE TOUR 2026",
-   "url": "http://www.rensa.jp/schedule_more/?index=3333",
-   "venue": "Rensa"
+   "time": "OPEN/START ① 12:00 / 12:45 ② 16:30 / 17:15",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3375",
+   "note": "INFO RINDO Entertainment",
+   "is_new": false
   },
   {
+   "title": "syrup16g Tour 2026 \"Canon Feel\"",
+   "date_start": "2026-11-12",
    "date_end": "",
-   "date_start": "2026-12-06",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "16:15 / 17:00",
-   "title": "9mm Parabellum Bullet / Tour 2026-27「Raison d’être」",
-   "url": "http://www.rensa.jp/schedule_more/?index=3320",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-12-15",
-   "is_new": false,
+   "time": "OPEN/START 18:15 / 19:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3368",
    "note": "INFO ノースロードミュージック仙台",
+   "is_new": false
+  },
+  {
+   "title": "SHANK \"THE TOUR 2026\"",
+   "date_start": "2026-11-13",
+   "date_end": "",
+   "time": "OPEN/START 18:00 / 19:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3284",
+   "note": "INFO ノースロードミュージック仙台",
+   "is_new": false
+  },
+  {
+   "title": "秋山黄色 LIVE TOUR 2026(タイトル仮)",
+   "date_start": "2026-11-14",
+   "date_end": "",
+   "time": "OPEN/START 16:15 / 17:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3283",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "eastern youth 全国巡業公演 ~ファイトバック現代 2026~",
+   "date_start": "2026-11-15",
+   "date_end": "",
+   "time": "OPEN/START 16:30 / 17:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3304",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "竹原ピストル",
+   "date_start": "2026-11-15",
+   "date_end": "",
    "time": "18:15 / 19:00",
-   "title": "竹原ピストル / 弾き語りツアー ”One for the show 2026”",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3369",
-   "venue": "Rensa"
+   "note": "ノースロードミュージック仙台",
+   "is_new": true
   },
   {
+   "title": "還暦記念ツアー『猟奇覚醒』",
+   "date_start": "2026-11-16",
    "date_end": "",
-   "date_start": "2026-12-17",
-   "is_new": false,
-   "note": "INFO ジー・アイ・ピーお問合せフォーム",
+   "time": "OPEN/START 18:00 / 19:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3338",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "ニュースタ FREE LIVE",
+   "date_start": "2026-11-17",
+   "date_end": "",
+   "time": "OPEN/START 18:00 / 18:30",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3377",
+   "note": "INFO NeW sTyle entertainment",
+   "is_new": false
+  },
+  {
+   "title": "中田裕二",
+   "date_start": "2026-11-17",
+   "date_end": "",
    "time": "開場18:15｜開演19:00",
-   "title": "中田裕二 / TOUR 26 \"砂上の楼閣\"",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3348",
-   "venue": "Rensa"
+   "note": "ジー・アイ・ピーお問合せフォーム",
+   "is_new": true
   },
   {
+   "title": "May'n",
+   "date_start": "2026-11-18",
    "date_end": "",
-   "date_start": "2026-12-18",
-   "is_new": true,
-   "note": "INFO ノースロードミュージック仙台",
    "time": "① 16:00 / 16:30 ② 19:00 / 19:30",
-   "title": "May'n / May’n All Requests Live Tour 2026「ひらがな はんぐじゃむ」",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3322",
-   "venue": "Rensa"
+   "note": "ノースロードミュージック仙台",
+   "is_new": true
   },
   {
+   "title": "八十八ヶ所巡礼",
+   "date_start": "2026-11-19",
    "date_end": "",
-   "date_start": "2026-12-19",
-   "is_new": false,
-   "note": "INFO GIP",
    "time": "17:00 / 18:00",
-   "title": "八十八ヶ所巡礼 / 20th Anniversary tour 日本万歳！！",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3386",
-   "venue": "Rensa"
+   "note": "GIP",
+   "is_new": true
   },
   {
+   "title": "PEDRO",
+   "date_start": "2026-11-20",
    "date_end": "",
-   "date_start": "2026-12-20",
-   "is_new": false,
-   "note": "INFO GIP",
    "time": "16:00 / 17:00",
-   "title": "PEDRO / TOUR 2026-2027 「This is PEDRO TOUR」",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3323",
-   "venue": "Rensa"
+   "note": "GIP",
+   "is_new": true
   },
   {
+   "title": "ポルフェス126 ポルカドットスティングレイ 2026冬ツアー（仮）",
+   "date_start": "2026-11-20",
    "date_end": "",
-   "date_start": "2026-12-25",
-   "is_new": false,
-   "note": "INFO キョードー東北",
-   "time": "25:00 / 26:00",
-   "title": "マザリ / 深夜全国巡業 『 二十六時ノ呪怪列島 』",
-   "url": "http://www.rensa.jp/schedule_more/?index=3346",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2026-12-26",
-   "is_new": false,
-   "note": "INFO ハルニシオン運営事務局",
-   "time": "16:00 / 16:30",
-   "title": "ハルニシオン / 凱旋ツアー「ハルノカエリミチ2026」※長浜瑠花 凱旋公演",
-   "url": "http://www.rensa.jp/schedule_more/?index=3384",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2027-01-08",
-   "is_new": false,
+   "time": "OPEN/START 17:30 / 18:30",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3324",
    "note": "INFO GIP",
-   "time": "① 14:30 / 15:30 ② 18:00 / 19:00",
-   "title": "GENIC / LIVE TOUR 2027",
-   "url": "http://www.rensa.jp/schedule_more/?index=3362",
-   "venue": "Rensa"
+   "is_new": false
   },
   {
+   "title": "超能力戦士ドリアン ワンマンライブツアー ドキドキ異世界ファンタジー",
+   "date_start": "2026-11-22",
    "date_end": "",
-   "date_start": "2027-01-09",
-   "is_new": false,
+   "time": "OPEN/START 16:45 / 17:30",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3328",
    "note": "INFO GIP",
-   "time": "① 13:00 / 14:00 ② 16:30 / 17:30",
-   "title": "GENIC / LIVE TOUR 2027",
-   "url": "http://www.rensa.jp/schedule_more/?index=3361",
-   "venue": "Rensa"
+   "is_new": false
   },
   {
+   "title": "15th ANNIVERSARY LIVE HOUSE TOUR 2026 \"生きてゆこうね\"",
+   "date_start": "2026-11-23",
    "date_end": "",
-   "date_start": "2027-01-10",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "① 13:30 / 14:00 ② 17:30 / 18:00",
-   "title": "芹澤優 / Yu Serizawa 6th Live Tour 2026-2027",
-   "url": "http://www.rensa.jp/schedule_more/?index=3363",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2027-01-16",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "17:15 / 18:00",
-   "title": "AK-69 / LIVE TOUR 2026 -Road to TOYOTA ARENA TOKYO-",
-   "url": "http://www.rensa.jp/schedule_more/?index=3364",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2027-01-21",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "17:30 / 18:30",
-   "title": "SIX LOUNGE / \"逆夢 ”TOUR",
-   "url": "http://www.rensa.jp/schedule_more/?index=3374",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2027-01-22",
-   "is_new": false,
-   "note": "INFO GIP",
-   "time": "18:00 / 19:00",
-   "title": "Paledusk / \"LIVE!!\" TOUR",
-   "url": "http://www.rensa.jp/schedule_more/?index=3365",
-   "venue": "Rensa"
-  },
-  {
-   "date_end": "",
-   "date_start": "2027-01-24",
-   "is_new": false,
+   "time": "OPEN/START 16:15 / 17:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3359",
    "note": "INFO EDWARD LIVE",
+   "is_new": false
+  },
+  {
+   "title": "マザリ",
+   "date_start": "2026-11-25",
+   "date_end": "",
+   "time": "25:00 / 26:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3346",
+   "note": "キョードー東北",
+   "is_new": true
+  },
+  {
+   "title": "ハルニシオン",
+   "date_start": "2026-11-26",
+   "date_end": "",
    "time": "16:00 / 16:30",
-   "title": "真心ブラザーズ / ライブ・ツアー 『TWIN MONTAIN TRAILS』",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3384",
+   "note": "ハルニシオン運営事務局",
+   "is_new": true
+  },
+  {
+   "title": "前衛懐古主義 part 5",
+   "date_start": "2026-11-27",
+   "date_end": "",
+   "time": "OPEN/START 18:30 / 19:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3343",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "花冷え。2MAN TOUR 2026",
+   "date_start": "2026-11-28",
+   "date_end": "",
+   "time": "OPEN/START 16:15 / 17:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3332",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## GENIC LIVE TOUR 2027",
+   "date_start": "2027-01-08",
+   "date_end": "",
+   "time": "OPEN/START    ① 14:30 / 15:30 ② 18:00 / 19:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3362",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## GENIC LIVE TOUR 2027",
+   "date_start": "2027-01-09",
+   "date_end": "",
+   "time": "OPEN/START    ① 13:00 / 14:00 ② 16:30 / 17:30",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3361",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## Yu Serizawa 6th Live Tour 2026-2027",
+   "date_start": "2027-01-10",
+   "date_end": "",
+   "time": "OPEN/START    ① 13:30 / 14:00 ② 17:30 / 18:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3363",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## AK-69 LIVE TOUR 2026 -Road to TOYOTA ARENA TOKYO-",
+   "date_start": "2027-01-16",
+   "date_end": "",
+   "time": "OPEN/START    17:15 / 18:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3364",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## SIX LOUNGE \"逆夢 \"TOUR",
+   "date_start": "2027-01-21",
+   "date_end": "",
+   "time": "OPEN/START    17:30 / 18:30",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3374",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## Paledusk \"LIVE!!\" TOUR",
+   "date_start": "2027-01-22",
+   "date_end": "",
+   "time": "OPEN/START    18:00 / 19:00",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3365",
+   "note": "INFO GIP",
+   "is_new": false
+  },
+  {
+   "title": "## 真心ブラザーズ ライブ・ツアー 『TWIN MONTAIN TRAILS』",
+   "date_start": "2027-01-24",
+   "date_end": "",
+   "time": "OPEN/START    16:00 / 16:30",
+   "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3370",
-   "venue": "Rensa"
+   "note": "INFO EDWARD LIVE",
+   "is_new": false
   }
  ],
- "fetched_at": "2026-11-08T21:25:00+09:00",
+ "fetched_at": "2026-11-13T17:40:26+09:00",
  "kind": "llm",
- "last_ok_at": "2026-11-08T21:25:00+09:00",
+ "last_ok_at": "2026-11-13T17:40:26+09:00",
  "message": "",
  "name": "Rensa",
  "ok": true,

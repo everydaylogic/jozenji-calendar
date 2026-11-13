@@ -1,10 +1,20 @@
-# 更新結果 2026-11-13 17:27（モデル: qwen3:8b）
+# 更新結果 2026-11-13 17:40（モデル: qwen3:8b）
 
 | サイト | 結果 | 件数 | 新着 | 時間 | メモ |
 |---|---|---|---|---|---|
-| mitsukoshi | 成功 | 8 | 2 | 0.1分 |  |
-| morisanho | 成功 | 0 | 0 | 0.1分 |  |
+| rensa | 成功 | 31 | 7 | 34.7分 |  |
+| miyagi-hall | 成功 | 31 | 7 | 55.8分 |  |
+| mitsukoshi | 成功 | 8 | 0 | 0.1分 |  |
+| kotodai | 成功 | 18 | 3 | 17.8分 | まとめサイトを読めませんでした（ConnectTimeout） |
+| morisanho | 成功 | 0 | 0 | 0.0分 |  |
 
-合計 0.1分
+合計 108.4分
 
-本番の events.json を取得できませんでした（HTTPSConnectionPool(host='everydaylogic.github.io', port=443): Max retries exceeded with url: /jozenji-display/events.json (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))）
+今月と来月（〜2026-12）の分を、本番の公開データと比べた結果：
+
+| サイト | 本番 | 試験 | 本番にだけある | 試験にだけある |
+|---|---|---|---|---|
+| kotodai | 16 | 18 | － | 12-04 ●おもてなしステーション<br>12-04 ●まちくるパフォーマーズ仙台<br>12-04 ●スターライト☆キャッスル |
+| mitsukoshi | 8 | 8 | － | － |
+| miyagi-hall | 18 | 23 | 11-12 反田恭平 ピアノリサイタル 2026 デビュー1<br>11-18 山内惠介 コンサートツアー2026 ～明鏡止水、 | 11-11 反田恭平 ピアノリサイタル ２０２６<br>11-18 令和8年度宮城県私立幼稚園・認定こども園教育振興<br>12-14 第13回定禅寺フォトコンテスト展<br>12-15 横山だいすけ My Songs Concert<br>12-19 横山だいすけ My Songs Concert |
+| rensa | 27 | 24 | 12-03 KIRITO / Tour 2026-2027「<br>12-05 山中さわお & ELPIS / 10/11 JO<br>12-06 9mm Parabellum Bullet / <br>12-15 竹原ピストル / 弾き語りツアー ”One fo<br>12-17 中田裕二 / TOUR 26 "砂上の楼閣"<br>12-18 May'n / May’n All Reques<br>12-19 八十八ヶ所巡礼 / 20th Anniversa<br>12-20 PEDRO / TOUR 2026-2027 「<br>12-25 マザリ / 深夜全国巡業 『 二十六時ノ呪怪列島<br>12-26 ハルニシオン / 凱旋ツアー「ハルノカエリミチ2 | 11-15 竹原ピストル<br>11-17 中田裕二<br>11-18 May'n<br>11-19 八十八ヶ所巡礼<br>11-20 PEDRO<br>11-25 マザリ<br>11-26 ハルニシオン |
