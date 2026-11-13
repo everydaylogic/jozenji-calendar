@@ -11,12 +11,17 @@ on:
         description: "一部のサイトだけ（カンマ区切り。空なら全部）例: mitsukoshi,morisanho"
         default: ""
         required: false
+      test_notice:
+        description: "連絡（Issue）のテスト"
+        type: boolean
+        default: false
   # 毎週日曜 6:48（日本時間）。Claude の定期更新（5:48）の後に動かして、結果を本番と見比べる
   schedule:
     - cron: "48 21 * * 6"
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: update
@@ -91,4 +96,35 @@ jobs:
           else
             git commit -m "events.json を更新（$(TZ=Asia/Tokyo date +%F)・試験）"
             git push
+          fi
+
+      - name: 問題があれば Issue で知らせる
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ "${{ inputs.test_notice }}" = "true" ]; then
+            echo "- これは連絡のテストです。届いていれば、この Issue は閉じてください" >> problems.md
+          fi
+          if [ "$JOB_STATUS" != "success" ]; then
+            printf -- "- 更新の処理そのものが途中で止まりました（%s）。今週のデータは更新されていません\n" "$JOB_STATUS" >> problems.md
+          fi
+          [ -s problems.md ] || { echo "問題なし"; exit 0; }
+          {
+            echo "@${{ github.repository_owner }} 控えの自動更新で問題がありました（$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')）。"
+            echo
+            cat problems.md
+            echo
+            echo "実行の記録：$RUN_URL"
+            echo
+            echo "直ったら、この Issue を閉じてください。閉じるまでは、次の問題もこの Issue に追記されます。"
+          } > issue.md
+          gh label create "更新の問題" --color d93f0b --description "控えの自動更新で問題があった" 2>/dev/null || true
+          num=$(gh issue list --state open --label "更新の問題" --json number -q '.[0].number')
+          if [ -n "$num" ]; then
+            gh issue comment "$num" --body-file issue.md
+          else
+            gh issue create --title "控えの自動更新で問題がありました" --label "更新の問題" --body-file issue.md
           fi

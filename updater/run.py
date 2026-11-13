@@ -64,6 +64,9 @@ def finalize(events: list[dict], prev: list[dict], ctx) -> list[dict]:
     return out
 
 
+PROBLEMS: list[str] = []
+
+
 def compare_with_prod(ctx) -> list[str]:
     """本番の events.json と、今月・来月分のイベントを見比べる。"""
     try:
@@ -87,6 +90,9 @@ def compare_with_prod(ctx) -> list[str]:
                 {"title": y_["title"], "date_start": y_["start"], "date_end": y_["end"]}) for y_ in ys)
         only_a = [f'{e["start"][5:]} {e["title"][:24]}' for e in pa if not match(e, pb)]
         only_b = [f'{e["start"][5:]} {e["title"][:24]}' for e in pb if not match(e, pa)]
+        if len(pa) >= 3 and len(pb) < len(pa) / 2:
+            PROBLEMS.append(f"{sid}：今月・来月の件数が本番の半分未満です（本番 {len(pa)} 件／控え {len(pb)} 件）。"
+                            "サイトの作りが変わって、読み取れなくなっている可能性があります")
         lines.append(f"| {sid} | {len(pa)} | {len(pb)} | {'<br>'.join(only_a) or '－'} | {'<br>'.join(only_b) or '－'} |")
     return [f"今月と来月（〜{nxt}）の分を、本番の公開データと比べた結果：", ""] + lines
 
@@ -124,6 +130,7 @@ def main() -> int:
             log.exception("%s failed", sid)
             doc.update(ok=False, fetched_at=now, message=str(e)[:200])
             status = "失敗"
+            PROBLEMS.append(f"{sid}：取得に失敗しました（{str(e)[:150]}）。前回のデータをそのまま表示しています")
         sec = time.time() - t0
         n = len(doc.get("events", []))
         new = sum(1 for e in doc.get("events", []) if e.get("is_new"))
@@ -139,6 +146,11 @@ def main() -> int:
                    check=True)
     report += ["", f"合計 {(time.time() - t_all)/60:.1f}分", ""] + compare_with_prod(ctx)
     text = "\n".join(report) + "\n"
+    prob_path = ROOT / "problems.md"
+    if PROBLEMS:
+        prob_path.write_text("\n".join(f"- {p}" for p in PROBLEMS) + "\n", encoding="utf-8")
+    elif prob_path.exists():
+        prob_path.unlink()
     (ROOT / "data" / "last_run.md").write_text(text, encoding="utf-8")
     if os.environ.get("GITHUB_STEP_SUMMARY"):
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
