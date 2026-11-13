@@ -11,9 +11,9 @@ on:
         description: "一部のサイトだけ（カンマ区切り。空なら全部）例: mitsukoshi,morisanho"
         default: ""
         required: false
-  # 試験がうまくいったら、下の2行の # を外すと毎週日曜 5:48（日本時間）に自動で動く
-  # schedule:
-  #   - cron: "48 20 * * 6"
+  # 毎週日曜 6:48（日本時間）。Claude の定期更新（5:48）の後に動かして、結果を本番と見比べる
+  schedule:
+    - cron: "48 21 * * 6"
 
 permissions:
   contents: write

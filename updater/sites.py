@@ -101,7 +101,7 @@ def same_event(a: dict, b: dict) -> bool:
 
 
 def from_llm(ev: dict, **extra) -> dict:
-    out = {"title": ev["title"], "date_start": ev["date_start"],
+    out = {"title": re.sub(r"^[●○◆◇■□・★☆\s]+", "", nf(ev["title"])), "date_start": ev["date_start"],
            "date_end": ev.get("date_end") or "", "time": ev.get("time") or "",
            "venue": ev.get("venue") or "", "url": ev.get("url") or "",
            "note": ev.get("note") or ""}
