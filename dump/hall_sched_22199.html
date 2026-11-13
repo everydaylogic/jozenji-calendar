@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <!--555<meta name="viewport" content="width=1020,  user-scalable=yes">-->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="/cms/wp/wp-content/themes/miyagi-hall2016/img/hall.ico">
+  <!-- CSS Files -->
+  <!--<link rel="stylesheet" type="text/css" href="/cms/wp/wp-content/themes/miyagi-hall2016/css/style.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/cms/wp/wp-content/themes/miyagi-hall2016/css/new_style.css" media="all">-->
+  <link rel="stylesheet" href="/cms/wp/wp-content/themes/miyagi-hall2016/style.css">
+  <link rel="stylesheet" media="(max-width: 640px)" href="/cms/wp/wp-content/themes/miyagi-hall2016/sp.css?20261113104236">
+  <link rel="stylesheet" media="(min-width: 641px)" href="/cms/wp/wp-content/themes/miyagi-hall2016/pc.css?20261113104236">
+  <link rel="stylesheet" href="/cms/wp/wp-content/themes/miyagi-hall2016/covid19.css?20261113104236">
+  <link rel="stylesheet" media="print" href="/cms/wp/wp-content/themes/miyagi-hall2016/print.css">
+
+
+  <link rel="stylesheet" type="text/css" href="/cms/wp/wp-content/themes/miyagi-hall2016/css/sp/bxslider.css" media="all">
+
+  <!-- Javascript Files -->
+  <script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="/js/jquery.easing.1.3.js"></script>
+  <script type="text/javascript" src="/js/jqueryAutoHeight.js"></script>
+  <script type="text/javascript" src="/js/jquery.scrollTo-1.4.2-min.js"></script>
+  <script type="text/javascript" src="/js/jquery.browser.min.js"></script>
+ <!-- <script type="text/javascript" src="/js/jquery.cycle.all.js"></script>-->
+   <script type="text/javascript" src="/cms/wp/wp-content/themes/miyagi-hall2016/js/jquery.cycle2.js"></script>
+  <script type="text/javascript" src="/js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="/js/waypoints.min.js"></script>
+  <script type="text/javascript" src="/js/wareki.js"></script>
+  <script type="text/javascript" src="/js/rollover.js"></script>
+  <script type="text/javascript" src="/js/scripts.js"></script>
+  <script type="text/javascript" src="/js/sp/bxslider.js"></script>
+  <script type="text/javascript" src="/js/jquery.smoothScroll.js"></script>
+  <script type="text/javascript" src="/js/sp/sp-slidemenu.js"></script>
+  
+  <script type="text/javascript" src="/js/bsn.Crossfader.js"></script>
+
+
+
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/js/html5.js"></script>
+<![endif]-->
+<!--[if IE 6]>
+<script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js"></script>
+<script type="text/javascript">
+DD_belatedPNG.fix('img,#global');
+</script>
+<![endif]-->
+
+
+<script type="text/javascript">
+
+$(function(){
+
+    //PC_MENUアニメーション
+    var pc_header = $('.header--fixed');  
+    var pc_header_contents = $('.header--fixed > .header__container');  
+    var pc_backtop = $('.move-to-top');  
+  
+    var showFlag01 = false;
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 165) {      
+        if (showFlag01 == false) {
+          showFlag01 = true;
+          pc_header.stop().animate({'top' : '0px'}, 300);
+          pc_header_contents.stop().fadeTo(1500, 1); 
+          pc_backtop.stop().fadeTo(1000, 1); 
+        }
+      } else {
+        if (showFlag01) {
+          showFlag01 = false;
+          pc_header.stop().animate({'top' : '-165px'}, 200); 
+          pc_header_contents.stop().fadeTo(100, 0); 
+          pc_backtop.stop().fadeTo(500, 0); 
+        }
+      }
+    });
+
+    //FADEアニメーション
+    $(".fade01").hover(function(){
+      $(this).stop().fadeTo("fast", 0.5);
+    },function(){
+      $(this).stop().fadeTo("fast", 1);
+    });
+    $(".fade02").hover(function(){
+      $(this).stop().fadeTo("fast", 0.5);
+    },function(){
+      $(this).stop().fadeTo("fast", 0);
+    });
+    $(".fade03").hover(function(){
+      $(".fade03").stop().fadeTo("fast", 0.5);
+    },function(){
+      $(".fade03").stop().fadeTo("fast", 1);
+    });
+
+
+  
+  // 検索バー
+	$('.sp-header__search').on("click", function() {
+    $('.sp-header__search__bar').slideToggle(250);
+	});
+
+	//NEWSアニメ−ション
+	obj = $('#bxslider').bxSlider({
+		auto:true, //自動再生
+		speed:1000, //スライドアニメーション時間
+		pause:6000, //静止時間
+		captions: false, //キャプション有無
+		pager:false, //ページャー有無
+		controls:true, //コントロール有無
+		infiniteLoop: true, //ループさせるか否か
+		touchEnabled: true, //タッチデバイス操作無効
+    	onSliderLoad: function () {
+			timeout_id = setTimeout(null , 10000);
+	  	},
+    	onSlideBefore: function () {
+			clearTimeout(timeout_id);
+	  	},
+    	onSlideAfter: function () { 
+			timeout_id = setTimeout(TimeoutFunc , 7000);
+	  	}
+	});
+	function TimeoutFunc(){
+		obj.startAuto();
+	}
+
+	var device = navigator.userAgent;
+	if((device.indexOf('iPhone') > 0 && device.indexOf('iPad') == -1) || device.indexOf('iPod') > 0 || device.indexOf('Android') > 0){
+		$(".tel01").wrap('<a href="tel:022-225-8641"></a>');
+	}
+
+    $('#cover .container div').cycle({
+        before:function(){},
+        after:function(){}
+    }).click(function(){
+        $(this).cycle('next');
+    });
+
+    var temp=getTerms();
+    $('#term .term1').html(temp[0]+'まで');
+    $('#term .term2').html(temp[1]+'まで');
+
+    $('.menu-button').on('touchstart ', function(){
+      $('.sp-bottom-slidemenu').fadeToggle();
+    });
+
+
+    var menu = SpSlidemenu('#sp-main', '.sp-header__nav', '.menu-button', {direction: 'right'});
+    $('.sp-header__nav__close').on('click', function(){
+      menu.slideClose();
+      $('.sp-bottom-slidemenu').fadeIn();
+    });
+    
+    // PC表示時にもSpSlidemenuが動作してしまうため、min-heightをautoにする
+    if ( window.innerWidth > 640 ) {
+      $('#sp-main').css('minHeight','auto');
+    }
+
+    
+
+    var resizeTimer;
+    var interval = Math.floor(1000 / 60 * 10);
+    window.addEventListener('resize', function (event) {
+      if (resizeTimer !== false) {
+        clearTimeout(resizeTimer);
+      }
+      resizeTimer = setTimeout(function () {
+        if ( $('.sp-header__nav').css('visibility') == 'visible' ) {
+          menu.slideClose();
+        }
+        
+        if ( $(window).width() > 640 ) {
+          $('#sp-main').css('minHeight','auto');
+        }
+
+        
+      }, interval);
+    });
+
+    // スマホ用ボトムスライドメニュー
+    $('.sp-bottom-slidemenu__button, .sp-bottom-slidemenu__overlay').on('click', function(){
+      $('.sp-bottom-slidemenu').toggleClass('opend');
+      $('.sp-bottom-slidemenu__overlay').css('height',$(document).height() + 'px').fadeToggle();
+    });
+
+
+    
+    
+});
+
+
+
+
+</script>
+
+<meta name='robots' content='max-image-preview:large' />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmiyagi-hall.jp%2Fschedules%2F22199%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmiyagi-hall.jp%2Fschedules%2F22199%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<link rel='stylesheet' id='contact-form-7-css' href='/cms/wp/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1.6' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css' href='/cms/wp/wp-includes/css/dashicons.min.css?ver=6.9.11' type='text/css' media='all' />
+<link rel='stylesheet' id='my-calendar-lists-css' href='/cms/wp/wp-content/plugins/my-calendar/css/list-presets.css?ver=3.7.18' type='text/css' media='all' />
+<link rel='stylesheet' id='my-calendar-reset-css' href='/cms/wp/wp-content/plugins/my-calendar/css/reset.css?ver=3.7.18' type='text/css' media='all' />
+<link rel='stylesheet' id='my-calendar-style-css' href='/cms/wp/wp-content/plugins/my-calendar/styles/my-calendar.css?ver=3.7.18-my-calendar-css' type='text/css' media='all' />
+<style id='my-calendar-style-inline-css' type='text/css'>
+
+/* Styles by My Calendar - Joe Dolson https://www.joedolson.com/ */
+
+.my-calendar-modal .event-title svg { background-color: #cccccc; padding: 3px; }
+.mc-main .mc_hall .event-title, .mc-main .mc_hall .event-title a { background: #cccccc !important; color: #000000 !important; }
+.mc-main .mc_hall .event-title button { background: #cccccc !important; color: #000000 !important; }
+.mc-main span.mc_hall { color: #cccccc; }
+.mc-main .mc_hall .event-title a:hover, .mc-main .mc_hall .event-title a:focus { background: #ffffff !important;}
+.mc-main .mc_hall .event-title button:hover, .mc-main .mc_hall .event-title button:focus { background: #ffffff !important;}
+.my-calendar-modal .event-title svg { background-color: #dd6a6a; padding: 3px; }
+.mc-main .mc_close .event-title, .mc-main .mc_close .event-title a { background: #dd6a6a !important; color: #000000 !important; }
+.mc-main .mc_close .event-title button { background: #dd6a6a !important; color: #000000 !important; }
+.mc-main span.mc_close { color: #dd6a6a; }
+.mc-main .mc_close .event-title a:hover, .mc-main .mc_close .event-title a:focus { background: #ff9d9d !important;}
+.mc-main .mc_close .event-title button:hover, .mc-main .mc_close .event-title button:focus { background: #ff9d9d !important;}
+.my-calendar-modal .event-title svg { background-color: #f5fb5d; padding: 3px; }
+.mc-main .mc_inspection .event-title, .mc-main .mc_inspection .event-title a { background: #f5fb5d !important; color: #000000 !important; }
+.mc-main .mc_inspection .event-title button { background: #f5fb5d !important; color: #000000 !important; }
+.mc-main span.mc_inspection { color: #f5fb5d; }
+.mc-main .mc_inspection .event-title a:hover, .mc-main .mc_inspection .event-title a:focus { background: #ffff90 !important;}
+.mc-main .mc_inspection .event-title button:hover, .mc-main .mc_inspection .event-title button:focus { background: #ffff90 !important;}
+.mc-main, .mc-event, .my-calendar-modal, .my-calendar-modal-overlay, .mc-event-list {--primary-dark: #313233; --primary-light: #fff; --secondary-light: #fff; --secondary-dark: #000; --highlight-dark: #666; --highlight-light: #efefef; --close-button: #b32d2e; --search-highlight-bg: #f5e6ab; --main-background: transparent; --main-color: inherit; --navbar-background: transparent; --nav-button-bg: #fff; --nav-button-color: #313233; --nav-button-border: #313233; --nav-input-border: #313233; --nav-input-background: #fff; --nav-input-color: #313233; --grid-cell-border: #0000001f; --grid-header-border: #313233; --grid-header-color: #313233; --grid-weekend-color: #313233; --grid-header-bg: transparent; --grid-weekend-bg: transparent; --grid-cell-background: transparent; --current-day-border: #313233; --current-day-color: #313233; --current-day-bg: transparent; --date-has-events-bg: #313233; --date-has-events-color: #f6f7f7; --calendar-heading: clamp( 1.125rem, 24px, 2.5rem ); --event-title: clamp( 1.25rem, 24px, 2.5rem ); --grid-date: 16px; --grid-date-heading: clamp( .75rem, 16px, 1.5rem ); --modal-title: 1.5rem; --navigation-controls: clamp( .75rem, 16px, 1.5rem ); --card-heading: 1.125rem; --list-date: 1.25rem; --author-card: clamp( .75rem, 14px, 1.5rem); --single-event-title: clamp( 1.25rem, 24px, 2.5rem ); --mini-time-text: clamp( .75rem, 14px 1.25rem ); --list-event-date: 1.25rem; --list-event-title: 1.2rem; --grid-max-width: 1260px; --main-margin: 0 auto; --list-preset-border-color: #000000; --list-preset-stripe-background: rgba( 0,0,0,.04 ); --list-preset-date-badge-background: #000; --list-preset-date-badge-color: #fff; --list-preset-background: transparent; --category-mc_hall: #cccccc; --category-mc_close: #dd6a6a; --category-mc_inspection: #f5fb5d; }
+/*# sourceURL=my-calendar-style-inline-css */
+</style>
+<script type="text/javascript" src="/cms/wp/wp-content/themes/miyagi-hall2016/modernizr.min.js?ver=6.9.11" id="modernizr-js"></script>
+<link rel="https://api.w.org/" href="/wp-json/" /><link rel="canonical" href="/schedules/22199/" />
+<link rel='shortlink' href='/?p=22199' />
+<style type="text/css"></style>
+<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><title>2026年11月 | 東京エレクトロンホール宮城</title>
+</head>
+<body class="wp-singular schedules-template-default single single-schedules postid-22199 wp-theme-miyagi-hall2016 2026-11 event">
+    <div id="new_top"></div>
+  
+  <header class="header">
+    <div class="header__container container">
+      <a href="/" class="header__logo"><img src="/new_img/new_logo01.png" alt="東京エレクトロンホール宮城"></a>
+      <div class="header__catchphrase"><span>宮城県より指定管理者としての指定を受け、<br>宮城県民会館管理運営共同企業体が<br>管理・運営を行っております。</span></div>
+      <a href="/foundation/" target="_blank" class="header__banner"><img src="/new_img/zaidan.logo.png" alt="宮城県文化振興財団"></a>
+      <div class="header__submenu clearfix">
+        <a href="/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>トップページ</span></a>
+        <a href="/inquiry" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>お問い合わせ</span></a>
+        <a href="/sitemap-page" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>サイトマップ</span></a>
+        <div class="header__search">
+
+<form method="get" id="searchform" class="header__search__form" action="/"><label class="hidden" for="s"></label>
+    <input type="text" value=""  name="s" class="header__search__input" id="s" style="width:125px; height:23px; padding:0 5px 0 5px; border: 1px solid #cccccc; outline: none; border-radius:0; webkit-border-radius:0; -webkit-appearance:none; " />
+    <input type="image" src="/cms/wp/wp-content/themes/miyagi-hall2016/new_img/search.jpg" alt="検索" id="searchsubmit" class="header__search__submit" value="Search"  style="width:50px; height:25px; margin:0; padding:0; outline: none; border-radius:0; webkit-border-radius:0; " />
+    </form>
+
+
+
+
+
+
+</div>
+      </div>
+      <nav class="header__nav">
+        <a href="/facility" class="header__nav__link"><span>施設のご案内</span></a>
+        <a href="/guide" class="header__nav__link"><span>ご利用案内</span></a>
+        <a href="/event" class="header__nav__link"><span>イベント情報</span></a>
+        <a href="/playguide" class="header__nav__link"><span>プレイガイド</span></a>
+        <a href="/access" class="header__nav__link"><span>アクセス</span></a>
+        <a href="/qa" class="header__nav__link"><span>Q&A</span></a>
+      </nav>
+    </div>
+  </header>
+
+
+  <header class="sp-header">
+    <div class="sp-header__container">
+      <div class="sp-header__logo">
+        <a href="/"><img src="/new_img/sp/new_logo02.png" alt="東京エレクトロンホール宮城"></a>
+      </div>
+      <div class="sp-header__menu menu-button">
+        <img src="/new_img/sp/sp_menubutton.png" alt="メニュー">
+      </div>
+      <div class="sp-header__search">
+        <img src="/new_img/sp/sp_search_icon01.png" alt="検索">
+      </div>
+    </div>
+
+    <div class="sp-header__search__bar">
+      <form method="get" class="sp-header__search__bar__form" action="/" >
+        <label class="hidden" for="s"></label>
+        <input type="text" value="" class="sp-header__search__bar__form__text" name="s" id="s" />
+        <input type="image" src="/cms/wp/wp-content/themes/miyagi-hall2016/new_img/sp/search.jpg" alt="検索" value="Search" class="sp-header__search__bar__form__submit" />
+      </form>
+    </div>
+  </header>
+
+  <nav class="sp-header__nav">
+    <div class="slidemenu-body">
+      <div class="sp-header__nav__title">
+        <img src="/new_img/sp/sp_menu_title.png">
+      </div>
+      <div class="slidemenu-content">
+        <ul class="sp-header__nav__menu">
+          <li><a class="menu-item sp-header__nav__menu__link" href="/facility"><span>施設のご案内</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/guide"><span>ご利用案内</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/event"><span>イベント情報</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/playguide"><span>プレイガイド</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/access"><span>アクセス</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/qa"><span>Q&A</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/inquiry"><span>お問い合わせ</span></a></li>
+        </ul>
+        <div class="sp-header__nav__close">
+          <img src="/new_img/sp/sp_menu_close.png">
+          <span>閉じる</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="layout" id="sp-main">
+
+  <div class="container cf">
+    <div class="section">
+      <div class="section__title section__title--event">
+        <h1>2026年11月</h1>
+        <div class="section__breadcrumb">
+          <a href="/">トップページ</a>
+          &gt;
+          イベント情報
+        </div>
+      </div>
+    </div>
+
+    <main class="main">
+      <section class="section section--bordered">
+        <div class="sp-section__title">
+          <h1>2026年11月</h1>
+        </div>
+
+      <div class="hidden__sp">
+        <p>＊大ホール催事予定表＊</p>
+<table style="border-collapse: collapse; width: 94.6358%; height: 10px;">
+<tbody>
+<tr style="height: 131px;">
+<td style="width: 969.938px; height: 10px;">
+<p><strong style="font-size: 12px; font-family: inherit;"><a href="/cms/wp/wp-content/uploads/2026/10/30/schedules/0a994cef1f24f5d164067540edf7523c.pdf"><img fetchpriority="high" decoding="async" src="/cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-356x504.jpg" alt="" width="356" height="504" class="alignnone size-large wp-image-22200" srcset="/cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-356x504.jpg 356w, /cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-234x331.jpg 234w, /cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-174x246.jpg 174w, /cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-768x1086.jpg 768w, /cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-1086x1536.jpg 1086w, /cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe-700x990.jpg 700w, /cms/wp/wp-content/uploads/2026/10/30/schedules/e242520bbfd8025d7a326c380d8be3fe.jpg 1240w" sizes="(max-width: 356px) 100vw, 356px" /></a><br>
+&nbsp;1）掲載内容は10月30日現在の情報です。内容は都合により変更されることがあります。<br>
+&nbsp;2）クリックするとPDFファイルが表示されます。<br>
+<br>
+・ 東京エレクトロンホール宮城の公式X， Facebookも御覧ください。</strong></p>
+</td>
+<td style="width: 209.062px; height: 10px;">
+<p>&nbsp;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>​中華料理「東龍門」・・・東京エレクトロンホール宮城２Ｆ　０２２－２１５－８１８１（定休水曜日）</p>      </div>
+      <div class="sp-schedules hidden__pc"></div>
+
+      </section>
+    </main>
+
+    <div class="sidebar">
+
+<script type="text/javascript">
+$(function(){
+return;
+    var obj=$('#calendar');
+    obj.setCalendar(new Date(),function(d){loadEvents.call(obj,d,setEvents);});
+});
+</script>
+
+<div class="section section--bordered hidden__sp">
+<h2>催事予定表</h2>
+<ul class="event-all-schedules"><li><a href="/schedules/22199/">2026年11月</a></li>
+<li><a href="/schedules/22135/">2026年10月</a></li>
+<li><a href="/schedules/22077/">2026年9月</a></li>
+<li><a href="/schedules/21987/">2026年8月</a></li>
+<li><a href="/schedules/21819/">2026年7月</a></li>
+<li><a href="/schedules/21674/">2026年6月</a></li>
+<li><a href="/schedules/21544/">2026年5月</a></li>
+<li><a href="/schedules/21385/">2026年4月</a></li>
+<li><a href="/schedules/21278/">2026年3月</a></li>
+<li><a href="/schedules/21175/">2026年2月</a></li>
+<li><a href="/schedules/21062/">2026年1月</a></li>
+<li><a href="/schedules/20987/">2025年12月</a></li>
+<li><a href="/schedules/20911/">2025年11月</a></li>
+<li><a href="/schedules/20873/">2025年10月</a></li>
+<li><a href="/schedules/20834/">2025年9月</a></li>
+<li><a href="/schedules/20760/">2025年8月</a></li>
+<li><a href="/schedules/20654/">2025年7月</a></li>
+<li><a href="/schedules/20529/">2025年6月</a></li>
+<li><a href="/schedules/20448/">2025年5月</a></li>
+<li><a href="/schedules/20406/">2025年4月</a></li>
+<li><a href="/schedules/20319/">2025年3月</a></li>
+<li><a href="/schedules/20266/">2025年2月</a></li>
+<li><a href="/schedules/20149/">2025年1月</a></li>
+<li><a href="/schedules/20076/">2024年12月</a></li>
+<li><a href="/schedules/19966/">2024年11月</a></li>
+<li><a href="/schedules/19886/">2024年10月</a></li>
+<li><a href="/schedules/19747/">2024年9月</a></li>
+<li><a href="/schedules/19616/">2024年8月</a></li>
+<li><a href="/schedules/19403/">2024年7月</a></li>
+<li><a href="/schedules/19229/">2024年6月</a></li>
+<li><a href="/schedules/19116/">2024年5月</a></li>
+<li><a href="/schedules/19035/">2024年4月</a></li>
+<li><a href="/schedules/18941/">2024年3月</a></li>
+<li><a href="/schedules/18915/">2024年2月</a></li>
+<li><a href="/schedules/18791/">2024年1月</a></li>
+</ul></div>
+
+<div class="sp-bottom-slidemenu sp-bottom-slidemenu--schedules">
+<div class="sp-bottom-slidemenu__button">
+<div class="sp-bottom-slidemenu__button__arrow">&nbsp;</div>
+</div>
+<div class="sp-bottom-slidemenu__container">
+<div class="sp-bottom-slidemenu__title">催事予定表はこちら</div>
+     <div class="sp-bottom-slidemenu__title sp-bottom-slidemenu__title--portlate-opend">スクロールして御覧ください</div>
+     <div class="sp-bottom-slidemenu__title sp-bottom-slidemenu__title--landscape-opend">スクロールして御覧ください</div>
+<ul class="event-all-schedules"><li><a href="/schedules/22199/">2026年11月</a></li>
+<li><a href="/schedules/22135/">2026年10月</a></li>
+<li><a href="/schedules/22077/">2026年9月</a></li>
+<li><a href="/schedules/21987/">2026年8月</a></li>
+<li><a href="/schedules/21819/">2026年7月</a></li>
+<li><a href="/schedules/21674/">2026年6月</a></li>
+<li><a href="/schedules/21544/">2026年5月</a></li>
+<li><a href="/schedules/21385/">2026年4月</a></li>
+<li><a href="/schedules/21278/">2026年3月</a></li>
+<li><a href="/schedules/21175/">2026年2月</a></li>
+<li><a href="/schedules/21062/">2026年1月</a></li>
+<li><a href="/schedules/20987/">2025年12月</a></li>
+<li><a href="/schedules/20911/">2025年11月</a></li>
+<li><a href="/schedules/20873/">2025年10月</a></li>
+<li><a href="/schedules/20834/">2025年9月</a></li>
+<li><a href="/schedules/20760/">2025年8月</a></li>
+<li><a href="/schedules/20654/">2025年7月</a></li>
+<li><a href="/schedules/20529/">2025年6月</a></li>
+<li><a href="/schedules/20448/">2025年5月</a></li>
+<li><a href="/schedules/20406/">2025年4月</a></li>
+<li><a href="/schedules/20319/">2025年3月</a></li>
+<li><a href="/schedules/20266/">2025年2月</a></li>
+<li><a href="/schedules/20149/">2025年1月</a></li>
+<li><a href="/schedules/20076/">2024年12月</a></li>
+<li><a href="/schedules/19966/">2024年11月</a></li>
+<li><a href="/schedules/19886/">2024年10月</a></li>
+<li><a href="/schedules/19747/">2024年9月</a></li>
+<li><a href="/schedules/19616/">2024年8月</a></li>
+<li><a href="/schedules/19403/">2024年7月</a></li>
+<li><a href="/schedules/19229/">2024年6月</a></li>
+<li><a href="/schedules/19116/">2024年5月</a></li>
+<li><a href="/schedules/19035/">2024年4月</a></li>
+<li><a href="/schedules/18941/">2024年3月</a></li>
+<li><a href="/schedules/18915/">2024年2月</a></li>
+<li><a href="/schedules/18791/">2024年1月</a></li>
+</ul></div>
+</div>
+
+
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+    $('.excel').each(function(){
+        var self=$(this);
+        var cells=self.find('tr:first>*').length;
+        var isEven=true;
+        var count=0;
+        self.find('tr').each(function(){
+            if(count>0){
+                count--;
+            }
+            else {
+                isEven=!isEven;
+                count=($(this).find('td:nth-child(3)').attr('rowspan')||1)-1;
+            }
+            $(this).addClass(isEven?'even':'odd');
+        });
+    });
+
+
+
+// スマホ用変換スクリプト
+var html = '';
+$('table').each(function(){
+  // <td>の数(結合を含める)
+  var td_length = 0;
+
+  // <tr>の数
+  var tr_length = $('tr', this).length;
+
+  // データ保存用オブジェクト
+  var data = new Object();
+
+  
+  // テーブルの行が1段よりも多い場合＝見出しがある場合
+  if (tr_length > 1) {
+
+    // 見出しの整理
+    $('tr:nth-child(1) td', this).each(function(a){
+
+      // 見出しの内容
+      var th_value = $(this).text();
+      th_value = th_value === void 0　? '' : th_value;
+
+      // 結合しているか
+      var colspan_num = $(this).attr('colspan');
+      colspan_num = parseInt(colspan_num);
+
+      // 結合していれば、その分同じ値で埋める
+      if (colspan_num >= 2) {
+        for (var i = 0; i < colspan_num; i++) {
+          data["th_" + td_length] = th_value.replace(/\s+/g, "");
+          td_length++;
+        }
+      } else {
+        data["th_" + td_length] = th_value.replace(/\s+/g, "");
+        td_length++;
+      }
+    });
+
+    // 日と曜日が隣合わせか
+    var is_sbs = false;
+    var sbs_no = '';
+
+    // テキストにカラーリングするか
+    var is_colored = false;
+
+    // 「催物名」があるカラムの番号
+    var event_no = '';
+
+    // 日と曜日の隣あわせチェック
+    for (var i = 0; i < td_length; i++) {
+      if (data["th_" + i] != '' && data["th_" + (i+1)] != '' && data["th_" + i].match(/^日$/) && data["th_" + (i + 1)].match(/^曜日$/)) {
+        is_sbs = true;
+        sbs_no = i;
+        break;
+      }
+    }
+
+    // 「催物名」があるカラムの番号の取得  
+    for (var i = 0; i < td_length; i++) {
+      if (data["th_" + i].match(/催.*物/) ) {
+        event_no = i;
+        is_colored = true;
+        break;
+      }
+    }
+
+    // 保存用オブジェクトの作成
+    for (var i = 0; i < td_length; i++) {
+      data["row_value_" + i] = '';
+      data["row_count_" + i] = 0;
+    }
+
+    // 2段目以降
+    $('tr:gt(0)', this).each(function(){
+
+      html += '<div class="sp-schedules__item">';
+      target = 0;
+      colspan_tmp = 0;
+
+      var is_day = false;
+      var is_day_of_the_week = false
+      
+      for (var i = 0; i < td_length; i++) {
+
+        if (colspan_tmp >= 2) {
+          colspan_tmp--;
+          target = i;
+          continue;
+
+        } else {
+
+          var td = $('td', this).get(i);
+          colspan_tmp = parseInt($(td).attr('colspan'));
+
+        }
+
+        if (data["row_count_" + i] > 1) {
+          html += data["row_value_" + i];
+          data["row_count_" + i]--;
+          if (data["row_count_" + i] == 1) {
+            data["row_value_" + i] = '';
+            data["row_count_" + i] = 0;
+          }
+          target = i;
+          continue;
+        }
+
+        data["row_value_" + i] = '';
+        data["row_count_" + i] = 0;
+
+        var rowspan = $('td', this).get(target);
+        if (rowspan) {
+
+          var value = '';
+
+          // 催事物の場合、HTMLを取得
+          if (event_no == i) {
+            value = $(rowspan).html();
+          } else {
+            value = $(rowspan).text();
+            value = value.replace(/^\s+/g, '');
+          }
+          var is_th = true;
+
+          // 日と曜日が隣あわせの時
+          if ( is_sbs ) {
+
+            if ( i == sbs_no) {
+              // 日
+              if (value.match(/^\d+$/)) {
+                value = value + '日';
+                is_day = true;
+              } 
+              is_th = false;
+            }
+
+            if ( i == sbs_no + 1) {
+              // 曜日
+              if (value.match(/^(月|火|水|木|金|土|日)$/)) {
+                value = '(' + value + ')';
+                is_day_of_the_week = true;
+              }
+              is_th = false;
+            }
+          }
+            
+          
+          if (value != '') {
+
+            if (i == event_no && is_colored) {
+              // イベント名のカラーリング
+              // 休館以外
+              if (!value.match(/休.*館/)) {
+                value = '<div class="sp-schedules__item__name">' + value + '</div>';
+              } else {
+                is_th = false;
+              }
+            }
+            
+            if (data["th_" + i] == '' ) {
+              data["row_value_" + i] = '<div>' + value + '</div>';
+            } else {
+              if (is_sbs && sbs_no == i) {
+                if (is_day) {
+                  data["row_value_" + i] = '<div>' + value;
+                } else {
+                  data["row_value_" + i] = '<div>' + value + '</div>';
+                }
+              }else if (is_sbs && (sbs_no + 1) == i) {
+                if (is_day && is_day_of_the_week) {
+                  data["row_value_" + i] = value + '</div>';
+                } else if (is_day && !is_day_of_the_week) {
+                  data["row_value_" + i] = '</div><div>' + value + '</div>';
+                } else {
+                  data["row_value_" + i] = '<div>' + value + '</div>';
+                }
+              } else {
+                data["row_value_" + i] = is_th ? '<div>' + data["th_" + i] + ': ' + value + '</div>' : '<div>' + value + '</div>';
+              }
+            }
+          }
+          data["row_count_" + i] = parseInt($(rowspan).attr('rowspan'));
+        } else {
+          data["row_value_" + i] = '';
+          data["row_count_" + i] = '';
+        }
+
+        html += data["row_value_" + i];
+        target++;
+      }
+      html += '</div>';
+    });
+
+  } else {
+    html += '<div class="sp-schedules__item">';
+    $('td', this).each(function(){
+      html += $(this).html();
+    });
+    html += '</div>';
+  }
+
+});
+$('.sp-schedules').append($(html));
+})
+
+$('.close_info').parent('div').css({'display':'block'});
+
+</script>
+
+<!--
+<div id="pagetop">
+<a href="#top"><img src="/img/pagetop.png"></a>
+</div>
+<script type="text/javascript">
+$(function(){
+    $.waypoints.settings.scrollThrottle = 30;
+    $("#pagetop").css({position:'fixed',bottom:'10px',top:'auto'});
+    $("#footer").waypoint(function(e,d){
+        if(d=='down'){
+            $("#pagetop").css({position:'relative',bottom:'auto',top:'-30px'});
+        }
+        else{
+            $("#pagetop").css({position:'fixed',bottom:'10px',top:'auto'});
+        }
+        e.stopPropagation();
+    },{offset:'100px'});
+});
+</script>
+-->
+
+<script type="text/javascript">
+$(function(){
+    $('#pagetop a').click(function(){$.scrollTo(0,1000);});
+    return false;
+});
+</script>
+
+
+
+
+
+
+
+
+<footer class="footer">
+  <div class="footer__container">
+    <div class="footer__information">
+      <a href="/" class="footer__information__logo"><img src="/new_img/new_logo02.png" alt="東京エレクトロンホール宮城"></a>
+				<div class="footer__information__content">〒980-0803 仙台市青葉区国分町3-3-7<br>窓口営業時間：9:00-18:00 （休館日:毎月第2水曜日、12月28日〜1月4日）<br>TEL：022-225-8641 　FAX：022-223-8728<br>Email：kenmin@miyagi-hall.jp</div>
+		    </div>
+    
+    <div class="footer__nav">
+      <div class="footer__contact">
+        <div class="footer__contact__title"><span>お問い合わせ</span></div>
+        <div class="footer__contact__phone"><img src="/new_img/new_tel01.png"></div>
+
+        <div class="footer__contact__form">
+          <a href="/inquiry/" class="footer__contact__form__link"><span>お問い合わせフォーム</span><img src="/new_img/new_arrow01.png"></a>
+        </div>
+      </div>
+
+
+      <a href="#new_top" class="sp-footer__move-to-top"><img src="/new_img/sp/sp_arrow05.png">PAGE TOP</a>
+      
+      <div class="footer__menu">
+        <div class="footer__menu__container">
+          <div><a href="/privacy/"  class="footer__menu__link"><img src="/new_img/new_icon02.gif"><span>プライバシーについて</span></a></div>    
+          <div><a href="/policy/" class="footer__menu__link"><img src="/new_img/new_icon02.gif"><span>リンクについて</span></a></div>
+          <div class="hidden__pc"><a href="/sitemap-page/" class="footer__menu__link"><img src="/new_img/new_icon02.gif"><span>サイトマップ</span></a></div>
+
+          <a href="https://www.facebook.com/pages/%E6%9D%B1%E4%BA%AC%E3%82%A8%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AD%E3%83%B3%E3%83%9B%E3%83%BC%E3%83%AB%E5%AE%AE%E5%9F%8E/462339943920959" class="sp-footer__facebook" target="_blank"><img src="/new_img/sp/fb_icon.gif"></a>
+          <a href="https://twitter.com/miyakenhall" class="sp-footer__twitter" target="_blank"><img src="/new_img/sp/tw_icon.gif"></a>		
+        </div>
+      </div>
+
+      <a href="/" class="sp-footer__logo"><img src="/new_img/sp/new_logo02.png" alt="東京エレクトロンホール宮城"></a>
+      
+      <div class="footer__copyright"><span>Copyright(C) 2008 miyagi-hall All Rights Reserved.</span></div>
+    </div>
+  </div>    
+</footer>
+
+
+</div>
+
+<header class="header--fixed">
+  <div class="header__container container">  
+    <a href="/" class="header__logo"><img class="new_img" src="/new_img/new_logo01.png" alt="東京エレクトロンホール宮城"></a>
+    <div class="header__catchphrase"><span>宮城県より指定管理者としての指定を受け、<br>宮城県民会館管理運営共同企業体が<br>管理・運営を行っております。</span></div>
+    <a href="/foundation/" target="_blank" class="header__banner"><img src="/new_img/zaidan.logo.png" alt="宮城県文化振興財団"></a>
+    <div class="header__submenu clearfix">
+      <a href="/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>トップページ</span></a>
+      <a href="/inquiry/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>お問い合わせ</span></a>
+      <a href="/sitemap-page/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>サイトマップ</span></a>
+      <div class="header__search">
+
+<form method="get" id="searchform" class="header__search__form" action="/"><label class="hidden" for="s"></label>
+    <input type="text" value=""  name="s" class="header__search__input" id="s" style="width:125px; height:23px; padding:0 5px 0 5px; border: 1px solid #cccccc; outline: none; border-radius:0; webkit-border-radius:0; -webkit-appearance:none; " />
+    <input type="image" src="/cms/wp/wp-content/themes/miyagi-hall2016/new_img/search.jpg" alt="検索" id="searchsubmit" class="header__search__submit" value="Search"  style="width:50px; height:25px; margin:0; padding:0; outline: none; border-radius:0; webkit-border-radius:0; " />
+    </form>
+
+
+
+
+
+
+</div>
+    </div>
+    <nav class="header__nav clearfix">
+      <a href="/facility/" class="header__nav__link"><span>施設のご案内</span></a>
+      <a href="/guide/" class="header__nav__link"><span>ご利用案内</span></a>
+      <a href="/event/" class="header__nav__link"><span>イベント情報</span></a>
+      <a href="/playguide/" class="header__nav__link"><span>プレイガイド</span></a>
+      <a href="/access/" class="header__nav__link"><span>アクセス</span></a>
+      <a href="/qa/" class="header__nav__link"><span>Q&A</span></a>
+    </nav>
+  </div>
+</header>
+
+
+
+
+
+<a href="#new_top" class="move-to-top"><img class="new_img" src="/new_img/new_arrow_top.png"></a>
+
+
+<div class="sp-bottom-slidemenu__overlay"></div>
+</body>
+</html>

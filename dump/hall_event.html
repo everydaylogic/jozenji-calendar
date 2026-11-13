@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <!--555<meta name="viewport" content="width=1020,  user-scalable=yes">-->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="shortcut icon" type="image/x-icon" href="/cms/wp/wp-content/themes/miyagi-hall2016/img/hall.ico">
+  <!-- CSS Files -->
+  <!--<link rel="stylesheet" type="text/css" href="/cms/wp/wp-content/themes/miyagi-hall2016/css/style.css" media="all">
+  <link rel="stylesheet" type="text/css" href="/cms/wp/wp-content/themes/miyagi-hall2016/css/new_style.css" media="all">-->
+  <link rel="stylesheet" href="/cms/wp/wp-content/themes/miyagi-hall2016/style.css">
+  <link rel="stylesheet" media="(max-width: 640px)" href="/cms/wp/wp-content/themes/miyagi-hall2016/sp.css?20261113104219">
+  <link rel="stylesheet" media="(min-width: 641px)" href="/cms/wp/wp-content/themes/miyagi-hall2016/pc.css?20261113104219">
+  <link rel="stylesheet" href="/cms/wp/wp-content/themes/miyagi-hall2016/covid19.css?20261113104219">
+  <link rel="stylesheet" media="print" href="/cms/wp/wp-content/themes/miyagi-hall2016/print.css">
+
+
+  <link rel="stylesheet" type="text/css" href="/cms/wp/wp-content/themes/miyagi-hall2016/css/sp/bxslider.css" media="all">
+
+  <!-- Javascript Files -->
+  <script type="text/javascript" src="/js/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.mousewheel.js"></script>
+  <script type="text/javascript" src="/js/jquery.easing.1.3.js"></script>
+  <script type="text/javascript" src="/js/jqueryAutoHeight.js"></script>
+  <script type="text/javascript" src="/js/jquery.scrollTo-1.4.2-min.js"></script>
+  <script type="text/javascript" src="/js/jquery.browser.min.js"></script>
+ <!-- <script type="text/javascript" src="/js/jquery.cycle.all.js"></script>-->
+   <script type="text/javascript" src="/cms/wp/wp-content/themes/miyagi-hall2016/js/jquery.cycle2.js"></script>
+  <script type="text/javascript" src="/js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="/js/waypoints.min.js"></script>
+  <script type="text/javascript" src="/js/wareki.js"></script>
+  <script type="text/javascript" src="/js/rollover.js"></script>
+  <script type="text/javascript" src="/js/scripts.js"></script>
+  <script type="text/javascript" src="/js/sp/bxslider.js"></script>
+  <script type="text/javascript" src="/js/jquery.smoothScroll.js"></script>
+  <script type="text/javascript" src="/js/sp/sp-slidemenu.js"></script>
+  
+  <script type="text/javascript" src="/js/bsn.Crossfader.js"></script>
+
+
+
+<!--[if lt IE 9]>
+<script type="text/javascript" src="/js/html5.js"></script>
+<![endif]-->
+<!--[if IE 6]>
+<script type="text/javascript" src="/js/DD_belatedPNG_0.0.8a-min.js"></script>
+<script type="text/javascript">
+DD_belatedPNG.fix('img,#global');
+</script>
+<![endif]-->
+
+
+<script type="text/javascript">
+
+$(function(){
+
+    //PC_MENUアニメーション
+    var pc_header = $('.header--fixed');  
+    var pc_header_contents = $('.header--fixed > .header__container');  
+    var pc_backtop = $('.move-to-top');  
+  
+    var showFlag01 = false;
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 165) {      
+        if (showFlag01 == false) {
+          showFlag01 = true;
+          pc_header.stop().animate({'top' : '0px'}, 300);
+          pc_header_contents.stop().fadeTo(1500, 1); 
+          pc_backtop.stop().fadeTo(1000, 1); 
+        }
+      } else {
+        if (showFlag01) {
+          showFlag01 = false;
+          pc_header.stop().animate({'top' : '-165px'}, 200); 
+          pc_header_contents.stop().fadeTo(100, 0); 
+          pc_backtop.stop().fadeTo(500, 0); 
+        }
+      }
+    });
+
+    //FADEアニメーション
+    $(".fade01").hover(function(){
+      $(this).stop().fadeTo("fast", 0.5);
+    },function(){
+      $(this).stop().fadeTo("fast", 1);
+    });
+    $(".fade02").hover(function(){
+      $(this).stop().fadeTo("fast", 0.5);
+    },function(){
+      $(this).stop().fadeTo("fast", 0);
+    });
+    $(".fade03").hover(function(){
+      $(".fade03").stop().fadeTo("fast", 0.5);
+    },function(){
+      $(".fade03").stop().fadeTo("fast", 1);
+    });
+
+
+  
+  // 検索バー
+	$('.sp-header__search').on("click", function() {
+    $('.sp-header__search__bar').slideToggle(250);
+	});
+
+	//NEWSアニメ−ション
+	obj = $('#bxslider').bxSlider({
+		auto:true, //自動再生
+		speed:1000, //スライドアニメーション時間
+		pause:6000, //静止時間
+		captions: false, //キャプション有無
+		pager:false, //ページャー有無
+		controls:true, //コントロール有無
+		infiniteLoop: true, //ループさせるか否か
+		touchEnabled: true, //タッチデバイス操作無効
+    	onSliderLoad: function () {
+			timeout_id = setTimeout(null , 10000);
+	  	},
+    	onSlideBefore: function () {
+			clearTimeout(timeout_id);
+	  	},
+    	onSlideAfter: function () { 
+			timeout_id = setTimeout(TimeoutFunc , 7000);
+	  	}
+	});
+	function TimeoutFunc(){
+		obj.startAuto();
+	}
+
+	var device = navigator.userAgent;
+	if((device.indexOf('iPhone') > 0 && device.indexOf('iPad') == -1) || device.indexOf('iPod') > 0 || device.indexOf('Android') > 0){
+		$(".tel01").wrap('<a href="tel:022-225-8641"></a>');
+	}
+
+    $('#cover .container div').cycle({
+        before:function(){},
+        after:function(){}
+    }).click(function(){
+        $(this).cycle('next');
+    });
+
+    var temp=getTerms();
+    $('#term .term1').html(temp[0]+'まで');
+    $('#term .term2').html(temp[1]+'まで');
+
+    $('.menu-button').on('touchstart ', function(){
+      $('.sp-bottom-slidemenu').fadeToggle();
+    });
+
+
+    var menu = SpSlidemenu('#sp-main', '.sp-header__nav', '.menu-button', {direction: 'right'});
+    $('.sp-header__nav__close').on('click', function(){
+      menu.slideClose();
+      $('.sp-bottom-slidemenu').fadeIn();
+    });
+    
+    // PC表示時にもSpSlidemenuが動作してしまうため、min-heightをautoにする
+    if ( window.innerWidth > 640 ) {
+      $('#sp-main').css('minHeight','auto');
+    }
+
+    
+
+    var resizeTimer;
+    var interval = Math.floor(1000 / 60 * 10);
+    window.addEventListener('resize', function (event) {
+      if (resizeTimer !== false) {
+        clearTimeout(resizeTimer);
+      }
+      resizeTimer = setTimeout(function () {
+        if ( $('.sp-header__nav').css('visibility') == 'visible' ) {
+          menu.slideClose();
+        }
+        
+        if ( $(window).width() > 640 ) {
+          $('#sp-main').css('minHeight','auto');
+        }
+
+        
+      }, interval);
+    });
+
+    // スマホ用ボトムスライドメニュー
+    $('.sp-bottom-slidemenu__button, .sp-bottom-slidemenu__overlay').on('click', function(){
+      $('.sp-bottom-slidemenu').toggleClass('opend');
+      $('.sp-bottom-slidemenu__overlay').css('height',$(document).height() + 'px').fadeToggle();
+    });
+
+
+    
+    
+});
+
+
+
+
+</script>
+
+<meta name='robots' content='max-image-preview:large' />
+<link rel="alternate" type="application/rss+xml" title="東京エレクトロンホール宮城 &raquo; イベント情報 のコメントのフィード" href="/event/feed/" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmiyagi-hall.jp%2Fevent%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fmiyagi-hall.jp%2Fevent%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<style id='wp-emoji-styles-inline-css' type='text/css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+/*# sourceURL=wp-emoji-styles-inline-css */
+</style>
+<style id='wp-block-library-inline-css' type='text/css'>
+:root{--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223;--wp-bound-block-color:var(--wp-block-synced-color);--wp-editor-canvas-background:#ddd;--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,160.5;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}.has-fit-text{white-space:nowrap!important}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{border:0;clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;word-wrap:normal!important}.screen-reader-text:focus{background-color:#ddd;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+
+/*# sourceURL=wp-block-library-inline-css */
+</style>
+<style id='classic-theme-styles-inline-css' type='text/css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+/*# sourceURL=/wp-includes/css/classic-themes.min.css */
+</style>
+<link rel='stylesheet' id='contact-form-7-css' href='/cms/wp/wp-content/plugins/contact-form-7/includes/css/styles.css?ver=6.1.6' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css' href='/cms/wp/wp-includes/css/dashicons.min.css?ver=6.9.11' type='text/css' media='all' />
+<link rel='stylesheet' id='my-calendar-lists-css' href='/cms/wp/wp-content/plugins/my-calendar/css/list-presets.css?ver=3.7.18' type='text/css' media='all' />
+<link rel='stylesheet' id='my-calendar-reset-css' href='/cms/wp/wp-content/plugins/my-calendar/css/reset.css?ver=3.7.18' type='text/css' media='all' />
+<link rel='stylesheet' id='my-calendar-style-css' href='/cms/wp/wp-content/plugins/my-calendar/styles/my-calendar.css?ver=3.7.18-my-calendar-css' type='text/css' media='all' />
+<style id='my-calendar-style-inline-css' type='text/css'>
+
+/* Styles by My Calendar - Joe Dolson https://www.joedolson.com/ */
+
+.my-calendar-modal .event-title svg { background-color: #cccccc; padding: 3px; }
+.mc-main .mc_hall .event-title, .mc-main .mc_hall .event-title a { background: #cccccc !important; color: #000000 !important; }
+.mc-main .mc_hall .event-title button { background: #cccccc !important; color: #000000 !important; }
+.mc-main span.mc_hall { color: #cccccc; }
+.mc-main .mc_hall .event-title a:hover, .mc-main .mc_hall .event-title a:focus { background: #ffffff !important;}
+.mc-main .mc_hall .event-title button:hover, .mc-main .mc_hall .event-title button:focus { background: #ffffff !important;}
+.my-calendar-modal .event-title svg { background-color: #dd6a6a; padding: 3px; }
+.mc-main .mc_close .event-title, .mc-main .mc_close .event-title a { background: #dd6a6a !important; color: #000000 !important; }
+.mc-main .mc_close .event-title button { background: #dd6a6a !important; color: #000000 !important; }
+.mc-main span.mc_close { color: #dd6a6a; }
+.mc-main .mc_close .event-title a:hover, .mc-main .mc_close .event-title a:focus { background: #ff9d9d !important;}
+.mc-main .mc_close .event-title button:hover, .mc-main .mc_close .event-title button:focus { background: #ff9d9d !important;}
+.my-calendar-modal .event-title svg { background-color: #f5fb5d; padding: 3px; }
+.mc-main .mc_inspection .event-title, .mc-main .mc_inspection .event-title a { background: #f5fb5d !important; color: #000000 !important; }
+.mc-main .mc_inspection .event-title button { background: #f5fb5d !important; color: #000000 !important; }
+.mc-main span.mc_inspection { color: #f5fb5d; }
+.mc-main .mc_inspection .event-title a:hover, .mc-main .mc_inspection .event-title a:focus { background: #ffff90 !important;}
+.mc-main .mc_inspection .event-title button:hover, .mc-main .mc_inspection .event-title button:focus { background: #ffff90 !important;}
+.mc-main, .mc-event, .my-calendar-modal, .my-calendar-modal-overlay, .mc-event-list {--primary-dark: #313233; --primary-light: #fff; --secondary-light: #fff; --secondary-dark: #000; --highlight-dark: #666; --highlight-light: #efefef; --close-button: #b32d2e; --search-highlight-bg: #f5e6ab; --main-background: transparent; --main-color: inherit; --navbar-background: transparent; --nav-button-bg: #fff; --nav-button-color: #313233; --nav-button-border: #313233; --nav-input-border: #313233; --nav-input-background: #fff; --nav-input-color: #313233; --grid-cell-border: #0000001f; --grid-header-border: #313233; --grid-header-color: #313233; --grid-weekend-color: #313233; --grid-header-bg: transparent; --grid-weekend-bg: transparent; --grid-cell-background: transparent; --current-day-border: #313233; --current-day-color: #313233; --current-day-bg: transparent; --date-has-events-bg: #313233; --date-has-events-color: #f6f7f7; --calendar-heading: clamp( 1.125rem, 24px, 2.5rem ); --event-title: clamp( 1.25rem, 24px, 2.5rem ); --grid-date: 16px; --grid-date-heading: clamp( .75rem, 16px, 1.5rem ); --modal-title: 1.5rem; --navigation-controls: clamp( .75rem, 16px, 1.5rem ); --card-heading: 1.125rem; --list-date: 1.25rem; --author-card: clamp( .75rem, 14px, 1.5rem); --single-event-title: clamp( 1.25rem, 24px, 2.5rem ); --mini-time-text: clamp( .75rem, 14px 1.25rem ); --list-event-date: 1.25rem; --list-event-title: 1.2rem; --grid-max-width: 1260px; --main-margin: 0 auto; --list-preset-border-color: #000000; --list-preset-stripe-background: rgba( 0,0,0,.04 ); --list-preset-date-badge-background: #000; --list-preset-date-badge-color: #fff; --list-preset-background: transparent; --category-mc_hall: #cccccc; --category-mc_close: #dd6a6a; --category-mc_inspection: #f5fb5d; }
+/*# sourceURL=my-calendar-style-inline-css */
+</style>
+<script type="text/javascript" src="/cms/wp/wp-content/themes/miyagi-hall2016/modernizr.min.js?ver=6.9.11" id="modernizr-js"></script>
+<link rel="https://api.w.org/" href="/wp-json/" /><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/pages/360" /><link rel="canonical" href="/event/" />
+<link rel='shortlink' href='/?p=360' />
+
+<style type="text/css"></style>
+
+<script type="text/javascript">$(function(){
+    $('.excel').each(function(){
+        var self=$(this);
+        var cells=self.find('tr:first>*').length;
+        var isEven=true;
+        var count=0;
+        self.find('tr').each(function(){
+            if(count>0){
+                count--;
+            }
+            else {
+                isEven=!isEven;
+                count=($(this).find('td:nth-child(3)').attr('rowspan')||1)-1;
+            }
+            $(this).addClass(isEven?'even':'odd');
+        });
+    });
+})</script>
+<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style><title>イベント情報 | 東京エレクトロンホール宮城</title>
+</head>
+<body class="wp-singular page-template-default page page-id-360 wp-theme-miyagi-hall2016 event">
+    <div id="new_top"></div>
+  
+  <header class="header">
+    <div class="header__container container">
+      <a href="/" class="header__logo"><img src="/new_img/new_logo01.png" alt="東京エレクトロンホール宮城"></a>
+      <div class="header__catchphrase"><span>宮城県より指定管理者としての指定を受け、<br>宮城県民会館管理運営共同企業体が<br>管理・運営を行っております。</span></div>
+      <a href="/foundation/" target="_blank" class="header__banner"><img src="/new_img/zaidan.logo.png" alt="宮城県文化振興財団"></a>
+      <div class="header__submenu clearfix">
+        <a href="/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>トップページ</span></a>
+        <a href="/inquiry" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>お問い合わせ</span></a>
+        <a href="/sitemap-page" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>サイトマップ</span></a>
+        <div class="header__search">
+
+<form method="get" id="searchform" class="header__search__form" action="/"><label class="hidden" for="s"></label>
+    <input type="text" value=""  name="s" class="header__search__input" id="s" style="width:125px; height:23px; padding:0 5px 0 5px; border: 1px solid #cccccc; outline: none; border-radius:0; webkit-border-radius:0; -webkit-appearance:none; " />
+    <input type="image" src="/cms/wp/wp-content/themes/miyagi-hall2016/new_img/search.jpg" alt="検索" id="searchsubmit" class="header__search__submit" value="Search"  style="width:50px; height:25px; margin:0; padding:0; outline: none; border-radius:0; webkit-border-radius:0; " />
+    </form>
+
+
+
+
+
+
+</div>
+      </div>
+      <nav class="header__nav">
+        <a href="/facility" class="header__nav__link"><span>施設のご案内</span></a>
+        <a href="/guide" class="header__nav__link"><span>ご利用案内</span></a>
+        <a href="/event" class="header__nav__link"><span>イベント情報</span></a>
+        <a href="/playguide" class="header__nav__link"><span>プレイガイド</span></a>
+        <a href="/access" class="header__nav__link"><span>アクセス</span></a>
+        <a href="/qa" class="header__nav__link"><span>Q&A</span></a>
+      </nav>
+    </div>
+  </header>
+
+
+  <header class="sp-header">
+    <div class="sp-header__container">
+      <div class="sp-header__logo">
+        <a href="/"><img src="/new_img/sp/new_logo02.png" alt="東京エレクトロンホール宮城"></a>
+      </div>
+      <div class="sp-header__menu menu-button">
+        <img src="/new_img/sp/sp_menubutton.png" alt="メニュー">
+      </div>
+      <div class="sp-header__search">
+        <img src="/new_img/sp/sp_search_icon01.png" alt="検索">
+      </div>
+    </div>
+
+    <div class="sp-header__search__bar">
+      <form method="get" class="sp-header__search__bar__form" action="/" >
+        <label class="hidden" for="s"></label>
+        <input type="text" value="" class="sp-header__search__bar__form__text" name="s" id="s" />
+        <input type="image" src="/cms/wp/wp-content/themes/miyagi-hall2016/new_img/sp/search.jpg" alt="検索" value="Search" class="sp-header__search__bar__form__submit" />
+      </form>
+    </div>
+  </header>
+
+  <nav class="sp-header__nav">
+    <div class="slidemenu-body">
+      <div class="sp-header__nav__title">
+        <img src="/new_img/sp/sp_menu_title.png">
+      </div>
+      <div class="slidemenu-content">
+        <ul class="sp-header__nav__menu">
+          <li><a class="menu-item sp-header__nav__menu__link" href="/facility"><span>施設のご案内</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/guide"><span>ご利用案内</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/event"><span>イベント情報</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/playguide"><span>プレイガイド</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/access"><span>アクセス</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/qa"><span>Q&A</span></a></li>
+          <li><a class="menu-item sp-header__nav__menu__link" href="/inquiry"><span>お問い合わせ</span></a></li>
+        </ul>
+        <div class="sp-header__nav__close">
+          <img src="/new_img/sp/sp_menu_close.png">
+          <span>閉じる</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="layout" id="sp-main">
+      <div class="container cf">
+        
+        <div class="section">
+          <div class="section__title">
+                        <h1><img src="/cms/wp/wp-content/uploads/2012/10/event.png"></h1>
+            <div class="section__breadcrumb">
+  <a href="/">トップページ</a>
+  &gt;
+    イベント情報</div>
+          </div>
+        </div>
+
+        <main class="main" id="main">
+          <section class="section section--bordered">
+
+      <div class="sp-section__title">
+  <h1>イベント情報</h1>
+</div>
+
+
+<h2>主催公演・イベント</h2>
+<ul class="list list--styled">
+	<li>タイトルからリンクされているものは、詳細を見ることが出来ます。</li>
+</ul>
+
+<ul class="event-list"><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/10/31/events/3857c284d745f1a507d3c4e95c7e6457-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/18437/">中村勘九郎 中村七之助 春暁歌舞伎特別公演 2027</a></span><span class="event-list__info__ticket">全席指定 ①S席 8,800円、 A席 6,800円、B席4,800円 ②S席7,800円、A席5,800円、B席3,800円 </span><span class="event-list__info__date">令和9年3月 22日(月)①開場11:30開演12:00 ②開場15:30開演16:00</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">サンライズプロモーション ☎0570-00-3337(平日12:00～15:00 ※土日祝休)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/08/15/events/omote-234x329.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/22023/">仙台放送開局65周年記念ミュージカル『ファインディング・ネバーランド』</a></span><span class="event-list__info__ticket">全席指定 S席16,000円、A席12,000円<br> ※未就学児入場不可<br> ※車いすスペース(付添い1名まで・ともに有料)ご希望の場合は仙台放送にて受付</span><span class="event-list__info__date">令和9年2月 5日(金)18:00 / 6日(土)12:30・17:30 / 7日(日)12:00[全4回公演]</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">仙台放送事業部 TEL:022-268-2174 (平日11:00～16:00)<br>東京エレクトロンホール宮城 TEL:022-225-8641(9:00～18:00 休館日毎月第2水曜日)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/09/26/events/6cc85f9796d46cc9471fcbe1ad6c8967-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/21244/">神韻日本公演2027</a></span><span class="event-list__info__ticket">全席指定 SS席23,000円、S席18,000円、A席14,000円、B席12,000円、C席10,000円、D席8,000円 ※6歳未満の入場不可</span><span class="event-list__info__date">令和9年3月 30日(火)①開場13:15開演14:00 ②開場18:15開演19:00 3月31日(水)③開場13:15開演14:00  </span><span class="event-list__info__place">東京エレクトロンホール宮城 </span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">一般社団法人 古典芸術振興会☎03-6907-3288</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/10/20/events/2143185de03d071ca06e5bebf79008b4-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/22179/">綾小路きみまろ爆笑スーパーライブin仙台</a></span><span class="event-list__info__ticket">全席指定5,800円(税込) ※18歳未満の方の入場はお断りいたします。</span><span class="event-list__info__date">令和9年1月 31日(日)開場12:30開演13:30</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">TSFプロジェクト☎0244-26-8887(10:00～17:00※平日のみ受付)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/10/08/events/4f83d2b88762c12b3e71cac418267070-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/20665/">ミュージカル「ALICE 〜不思議の国のアリスより〜」仙台公演</a></span><span class="event-list__info__ticket">S席11,000円、A席9,900円、B席6,600円、こども席(小中学生対象)3,300円 ※未就学児入場不可</span><span class="event-list__info__date">令和9年1月 29日(金)①開場12:45 開演13:30 ②開場17:45 開演18:30  1月30日(土)③開場12:45 開演13:30</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">河北新報社 事業部  ☎022-211-1332(平日10:00～17:00)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/10/23/events/sendai_H1_JapanTour2027_cropped_page-0001-356x500.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/19451/">大和証券グループ presents 辻井伸行 日本ツアー2027 《展覧会の絵》</a></span><span class="event-list__info__ticket">S席8,800円/A席7,700円/B席6,600円 ※未就学児入場不可 ※お一人様4枚まで</span><span class="event-list__info__date">令和9年1月 22日(金)開場17:45 開演18:30</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="soldout">売り切れ</span></span><span class="event-list__info__inquiry">仙台放送 事業部 ☎022-268-2174(平日11:00～16:00)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/08/13/events/967e38d60bc9777bc1b6938875d36f91-174x261.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/18053/">森高千里 2026-27 今夜もWe feel fine♪</a></span><span class="event-list__info__ticket">★東京エレクトロンホール宮城先行★ 座席引換券11,000円 ※座席引換券の販売となりますので、公演当日に大ホール受付窓口にて座席指定券と引き換えが必要です。 ※4歳以上チケット必要。3歳以下無料。 (ただし、保護者1名に対し1名まで膝上鑑賞可。お席が必要な場合はチケットをお買い求め下さい。)</span><span class="event-list__info__date">令和8年12月 25日(金)開場17:30 開演18:30 </span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="soldout">売り切れ</span></span><span class="event-list__info__inquiry">株式会社ジー・アイ・ピー お問い合わせフォーム: https://www.gip-web.co.jp/t/info (平日10:00～18:30)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/08/29/events/dd9daa77d62f1882248f34f57bef1691-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/18335/">仙台フィルハーモニー管弦楽団「第九」特別演奏会</a></span><span class="event-list__info__ticket">全席指定 S席一般6,500円、S席ユース4,500円、       A席一般5,500円、A席ユース3,500円       B席一般4,500円、B席ユース3,000円 ※未就学児のご入場はできません。</span><span class="event-list__info__date">令和8年12月 19日(土)開場14:15 開演 15:00</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="soldout">売り切れ</span></span><span class="event-list__info__inquiry">仙台フィルサービス&nbsp;☎022-225-3934(受付時間 平日10:00〜18:00)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/07/03/events/14a107c7105ea8100e4428a54c4f1859-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/18250/">横山だいすけ My Songs Concert</a></span><span class="event-list__info__ticket">S席 6,500円、A席 6,000円、当日学生券(大学生・専門学校生以下)2,000円 ※当館取扱いはS席、A席のみ ※小学生未満のお子様(乳幼児)のご入場は固くお断りいたします。 ※小学生以上のお子様は入場券が必要です。</span><span class="event-list__info__date">令和8年12月 6日(日)開場14:30  開演15:00</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">MIN-ON仙台 ☎022-355-4772(平日10:00～17:00)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/07/25/events/2134ec08c21e7f1726b4562365adc52e-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/21981/">石井竜也with山形交響楽団オーケストラコンサート</a></span><span class="event-list__info__ticket">プレミアムシート(特典付き)14,100円、指定席9,220円 ※未就学児入場不可 ※車椅子スペースをご希望の場合は事前にニイタカプラスへお問い合わせください。</span><span class="event-list__info__date">令和8年11月 21日(土)開場16:00/開演17:00</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="onsale">発売中</span></span><span class="event-list__info__inquiry">ニイタカプラス ℡022-380-8251(平日11:00～15:00)</span></div></li><li><div class="event-list__thumb"><img decoding="async" src="/cms/wp/wp-content/uploads/2026/03/14/events/21ea7f4822b0bb5046d5fe0730e11a14-174x246.jpg" width="150"></div><div class="event-list__info"><span class="event-list__info__title"><a href="/events/19993/">三山ひろしコンサート2026</a></span><span class="event-list__info__ticket">全席指定 7,000円  ※未就学児入場不可</span><span class="event-list__info__date">令和8年11月 17日(火)開場13:00 開演13:30</span><span class="event-list__info__place">東京エレクトロンホール宮城</span><span class="event-list__info__status"><span class="soldout">売り切れ</span></span><span class="event-list__info__inquiry">トラスト企画クリエート☎011-261-9991(平日10:00～17:00)</span></div></li></ul>
+
+    
+          </section>
+        </main>
+            
+        <div class="sidebar">
+
+&nbsp;
+          </div>
+        </div>
+<!--
+<div id="pagetop">
+<a href="#top"><img src="/img/pagetop.png"></a>
+</div>
+<script type="text/javascript">
+$(function(){
+    $.waypoints.settings.scrollThrottle = 30;
+    $("#pagetop").css({position:'fixed',bottom:'10px',top:'auto'});
+    $("#footer").waypoint(function(e,d){
+        if(d=='down'){
+            $("#pagetop").css({position:'relative',bottom:'auto',top:'-30px'});
+        }
+        else{
+            $("#pagetop").css({position:'fixed',bottom:'10px',top:'auto'});
+        }
+        e.stopPropagation();
+    },{offset:'100px'});
+});
+</script>
+-->
+
+<script type="text/javascript">
+$(function(){
+    $('#pagetop a').click(function(){$.scrollTo(0,1000);});
+    return false;
+});
+</script>
+
+
+
+
+
+
+
+
+<footer class="footer">
+  <div class="footer__container">
+    <div class="footer__information">
+      <a href="/" class="footer__information__logo"><img src="/new_img/new_logo02.png" alt="東京エレクトロンホール宮城"></a>
+				<div class="footer__information__content">〒980-0803 仙台市青葉区国分町3-3-7<br>窓口営業時間：9:00-18:00 （休館日:毎月第2水曜日、12月28日〜1月4日）<br>TEL：022-225-8641 　FAX：022-223-8728<br>Email：kenmin@miyagi-hall.jp</div>
+		    </div>
+    
+    <div class="footer__nav">
+      <div class="footer__contact">
+        <div class="footer__contact__title"><span>お問い合わせ</span></div>
+        <div class="footer__contact__phone"><img src="/new_img/new_tel01.png"></div>
+
+        <div class="footer__contact__form">
+          <a href="/inquiry/" class="footer__contact__form__link"><span>お問い合わせフォーム</span><img src="/new_img/new_arrow01.png"></a>
+        </div>
+      </div>
+
+
+      <a href="#new_top" class="sp-footer__move-to-top"><img src="/new_img/sp/sp_arrow05.png">PAGE TOP</a>
+      
+      <div class="footer__menu">
+        <div class="footer__menu__container">
+          <div><a href="/privacy/"  class="footer__menu__link"><img src="/new_img/new_icon02.gif"><span>プライバシーについて</span></a></div>    
+          <div><a href="/policy/" class="footer__menu__link"><img src="/new_img/new_icon02.gif"><span>リンクについて</span></a></div>
+          <div class="hidden__pc"><a href="/sitemap-page/" class="footer__menu__link"><img src="/new_img/new_icon02.gif"><span>サイトマップ</span></a></div>
+
+          <a href="https://www.facebook.com/pages/%E6%9D%B1%E4%BA%AC%E3%82%A8%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AD%E3%83%B3%E3%83%9B%E3%83%BC%E3%83%AB%E5%AE%AE%E5%9F%8E/462339943920959" class="sp-footer__facebook" target="_blank"><img src="/new_img/sp/fb_icon.gif"></a>
+          <a href="https://twitter.com/miyakenhall" class="sp-footer__twitter" target="_blank"><img src="/new_img/sp/tw_icon.gif"></a>		
+        </div>
+      </div>
+
+      <a href="/" class="sp-footer__logo"><img src="/new_img/sp/new_logo02.png" alt="東京エレクトロンホール宮城"></a>
+      
+      <div class="footer__copyright"><span>Copyright(C) 2008 miyagi-hall All Rights Reserved.</span></div>
+    </div>
+  </div>    
+</footer>
+
+
+</div>
+
+<header class="header--fixed">
+  <div class="header__container container">  
+    <a href="/" class="header__logo"><img class="new_img" src="/new_img/new_logo01.png" alt="東京エレクトロンホール宮城"></a>
+    <div class="header__catchphrase"><span>宮城県より指定管理者としての指定を受け、<br>宮城県民会館管理運営共同企業体が<br>管理・運営を行っております。</span></div>
+    <a href="/foundation/" target="_blank" class="header__banner"><img src="/new_img/zaidan.logo.png" alt="宮城県文化振興財団"></a>
+    <div class="header__submenu clearfix">
+      <a href="/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>トップページ</span></a>
+      <a href="/inquiry/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>お問い合わせ</span></a>
+      <a href="/sitemap-page/" class="header__submenu__link"><img src="/new_img/new_icon01.gif"><span>サイトマップ</span></a>
+      <div class="header__search">
+
+<form method="get" id="searchform" class="header__search__form" action="/"><label class="hidden" for="s"></label>
+    <input type="text" value=""  name="s" class="header__search__input" id="s" style="width:125px; height:23px; padding:0 5px 0 5px; border: 1px solid #cccccc; outline: none; border-radius:0; webkit-border-radius:0; -webkit-appearance:none; " />
+    <input type="image" src="/cms/wp/wp-content/themes/miyagi-hall2016/new_img/search.jpg" alt="検索" id="searchsubmit" class="header__search__submit" value="Search"  style="width:50px; height:25px; margin:0; padding:0; outline: none; border-radius:0; webkit-border-radius:0; " />
+    </form>
+
+
+
+
+
+
+</div>
+    </div>
+    <nav class="header__nav clearfix">
+      <a href="/facility/" class="header__nav__link"><span>施設のご案内</span></a>
+      <a href="/guide/" class="header__nav__link"><span>ご利用案内</span></a>
+      <a href="/event/" class="header__nav__link"><span>イベント情報</span></a>
+      <a href="/playguide/" class="header__nav__link"><span>プレイガイド</span></a>
+      <a href="/access/" class="header__nav__link"><span>アクセス</span></a>
+      <a href="/qa/" class="header__nav__link"><span>Q&A</span></a>
+    </nav>
+  </div>
+</header>
+
+
+
+
+
+<a href="#new_top" class="move-to-top"><img class="new_img" src="/new_img/new_arrow_top.png"></a>
+
+
+<div class="sp-bottom-slidemenu__overlay"></div>
+</body>
+</html>
