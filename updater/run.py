@@ -31,6 +31,9 @@ ROOT = Path(__file__).resolve().parent.parent
 SRC_DIR = ROOT / "data" / "sources"
 JST = dt.timezone(dt.timedelta(hours=9))
 PROD_JSON = "https://everydaylogic.github.io/jozenji-display/events.json"
+# 本番（Claude）と見比べるか。本番をやめたら .github/workflows/update.yml の COMPARE_WITH_PROD を "off" にする。
+# off のときは、先週の自分の events.json と見比べる（件数が急に減っていないかの見張り）。
+COMPARE_WITH_PROD = os.environ.get("COMPARE_WITH_PROD", "on").lower() not in ("off", "0", "false", "no")
 
 log = logging.getLogger("run")
 
@@ -67,20 +70,18 @@ def finalize(events: list[dict], prev: list[dict], ctx) -> list[dict]:
 PROBLEMS: list[str] = []
 
 
-def compare_with_prod(ctx) -> list[str]:
-    """本番の events.json と、今月・来月分のイベントを見比べる。"""
-    try:
-        prod = requests.get(PROD_JSON, timeout=30).json()
-    except Exception as e:  # noqa: BLE001
-        return [f"本番の events.json を取得できませんでした（{e}）"]
+def compare(ctx, base: dict, base_name: str, mine_name: str) -> list[str]:
+    """base（本番 または 先週の自分）と今回の events.json を、今月・来月分でサイトごとに見比べる。"""
     mine = json.loads((ROOT / "docs" / "events.json").read_text(encoding="utf-8"))
     y, m = ctx.today.year, ctx.today.month
     nxt = f"{y + (m == 12)}-{(m % 12) + 1:02d}"
     lim = f"{nxt}-31"
     def pick(d):
-        return [e for e in d["events"] if e["start"] <= lim and e["end"] >= ctx.month_start.isoformat()]
-    a, b = pick(prod), pick(mine)
-    lines = ["| サイト | 本番 | 試験 | 本番にだけある | 試験にだけある |", "|---|---|---|---|---|"]
+        return [e for e in d.get("events", []) if e["start"] <= lim and e["end"] >= ctx.month_start.isoformat()]
+    a, b = pick(base), pick(mine)
+    lines = [f"今月と来月（〜{nxt}）の分を、{base_name}と比べた結果：", "",
+             f"| サイト | {base_name} | {mine_name} | {base_name}にだけある | {mine_name}にだけある |",
+             "|---|---|---|---|---|"]
     for sid in sorted({e["s"] for e in a + b}):
         pa = [e for e in a if e["s"] == sid]
         pb = [e for e in b if e["s"] == sid]
@@ -91,10 +92,22 @@ def compare_with_prod(ctx) -> list[str]:
         only_a = [f'{e["start"][5:]} {e["title"][:24]}' for e in pa if not match(e, pb)]
         only_b = [f'{e["start"][5:]} {e["title"][:24]}' for e in pb if not match(e, pa)]
         if len(pa) >= 3 and len(pb) < len(pa) / 2:
-            PROBLEMS.append(f"{sid}：今月・来月の件数が本番の半分未満です（本番 {len(pa)} 件／控え {len(pb)} 件）。"
+            PROBLEMS.append(f"{sid}：今月・来月の件数が{base_name}の半分未満です（{base_name} {len(pa)} 件／{mine_name} {len(pb)} 件）。"
                             "サイトの作りが変わって、読み取れなくなっている可能性があります")
         lines.append(f"| {sid} | {len(pa)} | {len(pb)} | {'<br>'.join(only_a) or '－'} | {'<br>'.join(only_b) or '－'} |")
-    return [f"今月と来月（〜{nxt}）の分を、本番の公開データと比べた結果：", ""] + lines
+    return lines
+
+
+def compare_with_prod(ctx, prev_mine: dict | None) -> list[str]:
+    if COMPARE_WITH_PROD:
+        try:
+            prod = requests.get(PROD_JSON, timeout=30).json()
+        except Exception as e:  # noqa: BLE001
+            return [f"本番の events.json を取得できませんでした（{e}）"]
+        return compare(ctx, prod, "本番", "控え")
+    if not prev_mine:
+        return ["先週のデータが無いため、比較はしていません。"]
+    return compare(ctx, prev_mine, "先週", "今週")
 
 
 def main() -> int:
@@ -110,6 +123,8 @@ def main() -> int:
     report = [f"# 更新結果 {dt.datetime.now(JST):%Y-%m-%d %H:%M}（モデル: {ctx.ollama['model']}）", "",
               "| サイト | 結果 | 件数 | 新着 | 時間 | メモ |", "|---|---|---|---|---|---|"]
     t_all = time.time()
+    ev_path = ROOT / "docs" / "events.json"
+    prev_mine = json.loads(ev_path.read_text(encoding="utf-8")) if ev_path.exists() else None
     cache_path = ROOT / "data" / "llm_cache.json"
     if cache_path.exists():
         llm.CACHE.update(json.loads(cache_path.read_text(encoding="utf-8")))
@@ -144,7 +159,7 @@ def main() -> int:
     subprocess.run([sys.executable, str(ROOT / "tools" / "build_events_json.py"), str(SRC_DIR),
                     str(ROOT / "docs" / "events.json"), "--clinic", str(ROOT / "data" / "clinic_calendar.json")],
                    check=True)
-    report += ["", f"合計 {(time.time() - t_all)/60:.1f}分", ""] + compare_with_prod(ctx)
+    report += ["", f"合計 {(time.time() - t_all)/60:.1f}分", ""] + compare_with_prod(ctx, prev_mine)
     text = "\n".join(report) + "\n"
     prob_path = ROOT / "problems.md"
     if PROBLEMS:

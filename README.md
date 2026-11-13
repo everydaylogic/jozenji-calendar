@@ -44,3 +44,16 @@ data/last_run.md          直近の更新結果
 docs/                     公開ページ（本番と同じ）
 tools/                    公開用 events.json の作成（本番と同じ）
 ```
+
+## 問題があったときの連絡
+
+毎回の更新の最後に、次のどれかに当てはまれば Issue を立てて持ち主に知らせる（開いている Issue があれば追記）。
+
+- どれかのサイトが取れなかった（前回のデータをそのまま表示している）
+- 今月・来月の件数が、比べる相手の半分未満に減った（サイトの作りが変わった可能性）
+- 処理そのものが途中で止まった
+
+比べる相手は `.github/workflows/update.yml` の `COMPARE_WITH_PROD` で決まる。
+
+- `"on"`（今）… 本番（Claude が更新している jozenji-display）の events.json と比べる
+- `"off"` … 先週の自分の events.json と比べる。**本番（Claude）の更新をやめたら、ここを "off" にする**

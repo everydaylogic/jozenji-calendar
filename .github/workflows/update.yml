@@ -32,6 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 240
     env:
+      # 本番（Claude）の更新をやめたら "off" にする。off にすると、本番の代わりに先週の自分と見比べる
+      COMPARE_WITH_PROD: "on"
       OLLAMA_MODEL: ${{ inputs.model || 'qwen3:8b' }}
       OLLAMA_MODELS: ${{ github.workspace }}/../ollama-models
     steps:
