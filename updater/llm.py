@@ -113,7 +113,24 @@ def chunk_text(text: str, size: int, overlap: int = 400) -> list[str]:
 
 
 # ---------------------------------------------------------------- LLM呼び出し
+# 同じ文章・同じモデルへの問い合わせは、前回の答えを使い回す（変わっていないページはLLMを動かさない）
+CACHE: dict = {}
+USED: set = set()
+
+
 def call_ollama(prompt: str, ocfg: dict) -> dict:
+    import hashlib
+    k = hashlib.sha1((ocfg["model"] + "\n" + prompt).encode("utf-8")).hexdigest()
+    USED.add(k)
+    if k in CACHE:
+        log.info("LLM: 前回と同じ内容なので前回の結果を使います")
+        return CACHE[k]
+    out = _call_ollama(prompt, ocfg)
+    CACHE[k] = out
+    return out
+
+
+def _call_ollama(prompt: str, ocfg: dict) -> dict:
     body = {
         "model": ocfg["model"],
         "messages": [

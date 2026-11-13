@@ -2,84 +2,84 @@
  "color": "#e6a200",
  "events": [
   {
-   "title": "第38回 青葉区民まつり",
+   "date_end": "",
    "date_start": "2026-11-03",
-   "date_end": "",
-   "time": "",
-   "venue": "11月3日(火・祝日) 10時~16時 勾当台公園 (仮設広場・野外音楽堂)",
+   "is_new": false,
+   "note": "青葉区民まつり実行委員会",
+   "time": "10:00〜16:00",
+   "title": "第38回青葉区民まつり",
    "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
+   "venue": "勾当台公園（仮設広場・野外音楽堂）"
   },
   {
-   "title": "仙台市旬の香り市",
+   "date_end": "",
    "date_start": "2026-11-04",
-   "date_end": "",
-   "time": "",
-   "venue": "11月4日(水曜日) 9時30分~15時 勾当台公園(仮設広場)",
-   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
-  },
-  {
-   "title": "山形ふれあい マーケット",
-   "date_start": "2026-11-05",
-   "date_end": "",
-   "time": "",
-   "venue": "11月5日(木曜日) 10時~14時30分 勾当台公園(仮設広場)",
-   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
-  },
-  {
-   "title": "ふれあい製品フェア",
-   "date_start": "2026-11-06",
-   "date_end": "",
-   "time": "",
-   "venue": "11月6日(金曜日) 10時30分~14時30分 勾当台公園(仮設広場)",
-   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
-  },
-  {
-   "title": "エコフェスタ2026",
-   "date_start": "2026-11-08",
-   "date_end": "",
-   "time": "",
-   "venue": "11月8日(日曜日) 10時~15時 勾当台公園 (仮設広場・野外音楽堂)",
-   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
-  },
-  {
-   "title": "石巻きたかみ交流 うまいもの市",
-   "date_start": "2026-11-09",
-   "date_end": "",
-   "time": "",
-   "venue": "11月9日(月曜日) 10時~14時 勾当台公園(仮設広場)",
-   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
-  },
-  {
-   "title": "朝市・夕市ネットワーク",
-   "date_start": "2026-11-10",
-   "date_end": "",
-   "time": "",
-   "venue": "11月10日(火曜日) 10時~14時 勾当台公園(仮設広場)",
-   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
-  },
-  {
+   "is_new": false,
+   "note": "仙台市 農業振興課",
+   "time": "9:30〜15:00",
    "title": "仙台市旬の香り市",
-   "date_start": "2026-11-11",
-   "date_end": "",
-   "time": "",
-   "venue": "11月11日(水曜日) 9時30分~15時 勾当台公園(仮設広場)",
    "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
-   "note": "",
-   "is_new": false
+   "venue": "勾当台公園（仮設広場）"
+  },
+  {
+   "date_end": "",
+   "date_start": "2026-11-05",
+   "is_new": false,
+   "note": "山形ふれあいマーケット実行委員会",
+   "time": "10:00〜14:30",
+   "title": "山形ふれあいマーケット",
+   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
+   "venue": "勾当台公園（仮設広場）"
+  },
+  {
+   "date_end": "",
+   "date_start": "2026-11-06",
+   "is_new": false,
+   "note": "仙台市 障害企画課",
+   "time": "10:30〜14:30",
+   "title": "ふれあい製品フェア",
+   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
+   "venue": "勾当台公園（仮設広場）"
+  },
+  {
+   "date_end": "",
+   "date_start": "2026-11-08",
+   "is_new": false,
+   "note": "アメニティ・仙台推進協議会",
+   "time": "10:00〜15:00",
+   "title": "エコフェスタ2026",
+   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
+   "venue": "勾当台公園（仮設広場・野外音楽堂）"
+  },
+  {
+   "date_end": "",
+   "date_start": "2026-11-09",
+   "is_new": false,
+   "note": "石巻市北上地域物産振興協会",
+   "time": "10:00〜14:00",
+   "title": "石巻きたかみ交流うまいもの市",
+   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
+   "venue": "勾当台公園（仮設広場）"
+  },
+  {
+   "date_end": "",
+   "date_start": "2026-11-10",
+   "is_new": false,
+   "note": "朝市・夕市ネットワーク",
+   "time": "10:00〜14:00",
+   "title": "朝市・夕市ネットワーク",
+   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
+   "venue": "勾当台公園（仮設広場）"
+  },
+  {
+   "date_end": "",
+   "date_start": "2026-11-11",
+   "is_new": false,
+   "note": "仙台市 農業振興課",
+   "time": "9:30〜15:00",
+   "title": "仙台市旬の香り市",
+   "url": "https://www.city.sendai.jp/aoba-koen-somu/aobaku/koen/shokai.html",
+   "venue": "勾当台公園（仮設広場）"
   },
   {
    "big": true,
@@ -93,81 +93,59 @@
    "venue": "定禅寺通（仙台三越前〜定禅寺ガーデンヒルズ迎賓館前）"
   },
   {
-   "title": "●おもてなしステーション",
-   "date_start": "2026-12-04",
-   "date_end": "2026-12-25",
-   "time": "",
-   "venue": "勾当台公園",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "総合案内・迷子対応",
    "big": true,
-   "is_new": true
-  },
-  {
-   "title": "●まちくるパフォーマーズ仙台",
-   "date_start": "2026-12-04",
-   "date_end": "2026-12-25",
-   "time": "",
-   "venue": "勾当台公園",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "パフォーマーによるショー",
-   "big": true,
-   "is_new": true
-  },
-  {
-   "title": "●スターライト☆キャッスル",
-   "date_start": "2026-12-04",
-   "date_end": "2026-12-25",
-   "time": "",
-   "venue": "勾当台公園",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "オブジェ・ひかリング入場",
-   "big": true,
-   "is_new": true
-  },
-  {
-   "title": "点灯式",
-   "date_start": "2026-12-04",
    "date_end": "",
-   "time": "17:40～18:00",
-   "venue": "定禅寺通緑道（せんだいメディアテーク前）",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "点灯式。主催：一般財団法人SENDAI光のページェント",
-   "big": true,
-   "is_new": false
+   "date_start": "2026-12-04",
+   "is_new": false,
+   "note": "SENDAI光のページェント関連",
+   "time": "17:40〜18:00",
+   "title": "光のページェント 点灯式",
+   "url": "https://sendaihikape.jp/event/",
+   "venue": "定禅寺通緑道（せんだいメディアテーク前）"
   },
   {
-   "title": "●サンタを探して素敵なプレゼントを貰おう！",
-   "date_start": "2026-12-05",
+   "big": true,
    "date_end": "2026-12-06",
-   "time": "18:00～20:00",
-   "venue": "勾当台公園",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "サンタ見つけ・写真撮影",
-   "big": true,
-   "is_new": false
-  },
-  {
-   "title": "陸上自衛隊東北方面音楽隊コンサート",
    "date_start": "2026-12-05",
-   "date_end": "",
-   "time": "18:00～18:40",
-   "venue": "勾当台公園ビックテント",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "音楽隊コンサート。主催：一般財団法人SENDAI光のページェント",
-   "big": true,
-   "is_new": false
+   "is_new": false,
+   "note": "SENDAI光のページェント関連（各日定員あり）",
+   "time": "18:00〜20:00",
+   "title": "サンタを探して素敵なプレゼントを貰おう！",
+   "url": "https://sendaihikape.jp/event/",
+   "venue": "勾当台公園"
   },
   {
-   "title": "●ＳＴＡＲＬＩＧＨＴ☆ＥＣＨＯＥＳ",
-   "date_start": "2026-12-12",
-   "date_end": "2026-12-20",
-   "time": "アカペラコンサート：12/12、12/13；ダンスイベント：12/19、12/20",
-   "venue": "勾当台公園ビックテント",
-   "url": "https://sendaihikape.jp/overview/",
-   "note": "アカペラ・ダンスイベント",
    "big": true,
-   "is_new": false
+   "date_end": "",
+   "date_start": "2026-12-05",
+   "is_new": false,
+   "note": "SENDAI光のページェント関連",
+   "time": "18:00〜18:40",
+   "title": "陸上自衛隊東北方面音楽隊コンサート",
+   "url": "https://sendaihikape.jp/event/",
+   "venue": "勾当台公園ビックテント"
+  },
+  {
+   "big": true,
+   "date_end": "2026-12-13",
+   "date_start": "2026-12-12",
+   "is_new": false,
+   "note": "SENDAI光のページェント関連",
+   "time": "",
+   "title": "STARLIGHT☆ECHOES アカペラコンサート",
+   "url": "https://sendaihikape.jp/event/",
+   "venue": "勾当台公園ビックテント"
+  },
+  {
+   "big": true,
+   "date_end": "2026-12-20",
+   "date_start": "2026-12-19",
+   "is_new": false,
+   "note": "SENDAI光のページェント関連",
+   "time": "",
+   "title": "STARLIGHT☆ECHOES ダンスイベント",
+   "url": "https://sendaihikape.jp/event/",
+   "venue": "勾当台公園ビックテント"
   },
   {
    "big": true,
@@ -192,10 +170,10 @@
    "venue": "勾当台公園"
   }
  ],
- "fetched_at": "2026-11-13T19:11:01+09:00",
+ "fetched_at": "2026-11-08T21:25:00+09:00",
  "kind": "park",
- "last_ok_at": "2026-11-13T19:11:01+09:00",
- "message": "まとめサイトを読めませんでした（ConnectTimeout）",
+ "last_ok_at": "2026-11-08T21:25:00+09:00",
+ "message": "",
  "name": "勾当台公園",
  "ok": true,
  "order": 3.5,

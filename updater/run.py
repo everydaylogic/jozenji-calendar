@@ -24,6 +24,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import llm  # noqa: E402
 import sites  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -103,6 +104,9 @@ def main() -> int:
     report = [f"# 更新結果 {dt.datetime.now(JST):%Y-%m-%d %H:%M}（モデル: {ctx.ollama['model']}）", "",
               "| サイト | 結果 | 件数 | 新着 | 時間 | メモ |", "|---|---|---|---|---|---|"]
     t_all = time.time()
+    cache_path = ROOT / "data" / "llm_cache.json"
+    if cache_path.exists():
+        llm.CACHE.update(json.loads(cache_path.read_text(encoding="utf-8")))
     for sid, (fn, uses_llm) in sites.SITES.items():
         if only and sid not in only:
             continue
@@ -127,6 +131,9 @@ def main() -> int:
         path.write_text(json.dumps(doc, ensure_ascii=False, indent=1), encoding="utf-8")
         log.info("%s: %s %d件 %.1f分", sid, status, n, sec / 60)
 
+    if llm.USED:
+        keep = {k: v for k, v in llm.CACHE.items() if k in llm.USED}
+        cache_path.write_text(json.dumps(keep, ensure_ascii=False), encoding="utf-8")
     subprocess.run([sys.executable, str(ROOT / "tools" / "build_events_json.py"), str(SRC_DIR),
                     str(ROOT / "docs" / "events.json"), "--clinic", str(ROOT / "data" / "clinic_calendar.json")],
                    check=True)
