@@ -82,7 +82,7 @@
    "is_new": false
   },
   {
-   "title": "秋山黄色 LIVE TOUR 2026(タイトル仮)",
+   "title": "秋山黄色 LIVETOUR2026「頭に無音がやってきた」",
    "date_start": "2026-11-14",
    "date_end": "",
    "time": "16:15 / 17:00",
@@ -342,9 +342,9 @@
    "is_new": false
   }
  ],
- "fetched_at": "2026-11-13T19:48:04+09:00",
+ "fetched_at": "2026-11-15T10:19:56+09:00",
  "kind": "llm",
- "last_ok_at": "2026-11-13T19:48:04+09:00",
+ "last_ok_at": "2026-11-15T10:19:56+09:00",
  "message": "",
  "name": "Rensa",
  "ok": true,
