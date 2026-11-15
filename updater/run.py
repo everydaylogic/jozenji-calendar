@@ -98,13 +98,40 @@ def compare(ctx, base: dict, base_name: str, mine_name: str) -> list[str]:
     return lines
 
 
+def check_prod_fresh(prod: dict, now: dt.datetime) -> str | None:
+    """本番（Claude）が直近の日曜の定期更新（5:30頃）のあとに更新されているか。止まっていれば理由を返す。"""
+    raw = prod.get("generated_at") or prod.get("generated") or ""
+    try:
+        gen = dt.datetime.fromisoformat(raw)
+        if gen.tzinfo is None:
+            gen = gen.replace(tzinfo=JST)
+    except ValueError:
+        return f"本番のデータの作成日時が読めませんでした（{raw!r}）"
+    sunday = (now - dt.timedelta(days=(now.weekday() + 1) % 7)).replace(hour=5, minute=0, second=0, microsecond=0)
+    if sunday > now:
+        sunday -= dt.timedelta(days=7)
+    if now - sunday < dt.timedelta(hours=1):      # 本番の更新がまだ終わっていないかもしれない時間帯
+        sunday -= dt.timedelta(days=7)
+    if gen < sunday:
+        return (f"本番（Claude）の更新が止まっているようです。本番のデータは {gen:%m/%d %H:%M} に作られたままで、"
+                f"{sunday:%m/%d}（日）朝の定期更新が反映されていません。Claude の使用量の上限や、定期実行の設定を確認してください"
+                "（控えのページは今週分に更新されています）")
+    return None
+
+
 def compare_with_prod(ctx, prev_mine: dict | None) -> list[str]:
     if COMPARE_WITH_PROD:
         try:
             prod = requests.get(PROD_JSON, timeout=30).json()
         except Exception as e:  # noqa: BLE001
+            PROBLEMS.append(f"本番のデータ（{PROD_JSON}）を読み込めませんでした（{type(e).__name__}）。本番のページが止まっていないか確認してください")
             return [f"本番の events.json を取得できませんでした（{e}）"]
-        return compare(ctx, prod, "本番", "控え")
+        stale = check_prod_fresh(prod, dt.datetime.now(JST))
+        lines = []
+        if stale:
+            PROBLEMS.append(stale)
+            lines = [f"**注意：{stale}**", ""]
+        return lines + compare(ctx, prod, "本番", "控え")
     if not prev_mine:
         return ["先週のデータが無いため、比較はしていません。"]
     return compare(ctx, prev_mine, "先週", "今週")
