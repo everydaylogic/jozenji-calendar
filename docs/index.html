@@ -32,6 +32,36 @@ header{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
 .badge.clinic{background:var(--clinic-bg);color:var(--clinic-text);border:1px solid #2f5d3a}
 .badge.warn{color:var(--warn);border:1px solid #5c3d1e}
 .rule{height:1px;background:var(--line);flex:none}
+/* 天気（気象庁の予報。今日と明日） */
+.wx{display:grid;grid-template-columns:1fr 1fr;gap:8px;flex:none}
+.wx:empty{display:none}
+.wxd{background:var(--card);border-radius:8px;padding:8px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.wxd .top{display:flex;align-items:center;gap:8px;min-width:0}
+.wxd .lb{font-size:13px;color:var(--muted);font-weight:700;white-space:nowrap}
+.wxd .ic{font-size:26px;line-height:1;white-space:nowrap}
+.wxd .ic small{font-size:16px;margin-left:1px}
+.wxd .tp{margin-left:auto;font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.wxd .tp .hi{color:#ff8a80}.wxd .tp .lo{color:#74c0fc}.wxd .tp i{font-style:normal;color:var(--muted);font-weight:400;margin:0 3px}
+.wxd .tx{font-size:13px;color:var(--sub);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.wxd .pp{display:flex;gap:12px;font-size:13px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.wxd .pp b{color:var(--text);font-weight:700;margin-left:3px}
+.wxd .pp b.wet{color:#74c0fc}
+.wxd .pp b.none{color:var(--muted);font-weight:400}
+@media (max-width: 480px) {
+  .wx{gap:6px}
+  .wxd{padding:8px 10px}
+  .wxd .ic{font-size:22px}
+  .wxd .ic small{font-size:14px}
+  .wxd .tp{font-size:17px}
+  .wxd .tp i{margin:0 2px}
+  .wxd .pp{gap:6px;font-size:12px}
+  .wxd .pp b{margin-left:2px}
+}
+@media (max-width: 380px) {
+  .wxd{padding:8px}
+  .wxd .pp{gap:4px;font-size:11px}
+  .wxd .pp b{margin-left:1px}
+}
 .clinic-strip{display:grid;grid-template-columns:auto 1fr auto;align-items:center;column-gap:12px;
   background:var(--clinic-bg);border-radius:8px;padding:8px 12px;white-space:nowrap}
 .clinic-strip:empty{display:none}
@@ -95,10 +125,20 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 /* 横向き（スマホを横にして置いたとき）：左に日付・時計・健診・明日、右に今日の予定 */
 @media (orientation: landscape) and (max-height: 520px) {
   #app{display:grid;grid-template-columns:236px minmax(0,1fr);
-    grid-template-rows:auto auto auto 1fr auto;
-    grid-template-areas:"head main" "clinic main" "badges main" "next main" "foot main";
+    grid-template-rows:auto auto auto auto 1fr auto;
+    grid-template-areas:"head main" "wx main" "clinic main" "badges main" "next main" "foot main";
     column-gap:14px;row-gap:8px;padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left))}
   header{grid-area:head}
+  /* 左の列は狭いので、今日・明日を縦に並べ、天気の文は省く（絵・気温・降水確率だけ） */
+  #wx{grid-area:wx;grid-template-columns:1fr;gap:4px}
+  .wxd{padding:5px 10px;gap:2px}
+  .wxd .top{gap:6px}
+  .wxd .lb{font-size:12px}
+  .wxd .ic{font-size:18px}
+  .wxd .ic small{font-size:12px}
+  .wxd .tp{font-size:15px}
+  .wxd .tx{display:none}
+  .wxd .pp{gap:8px;font-size:12px}
   #clinic{grid-area:clinic}
   #badges{grid-area:badges}
   .rule{display:none}
@@ -124,6 +164,7 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
     <div class="date"><b id="d">--/--</b><span id="w">読み込み中…</span></div>
     <div class="clock" id="clock">--:--</div>
   </header>
+  <div class="wx" id="wx"></div>
   <div class="clinic-strip" id="clinic"></div>
   <div class="badges" id="badges"></div>
   <div class="rule"></div>
@@ -144,16 +185,22 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
   const NIGHT = [23, 6];           // この時間帯は画面を暗くする（時）
   const DAILY_RELOAD_HOUR = 4;     // 毎日この時刻にページを読み直す（時）
   const CACHE_KEY = 'jozenji-events-v1';
+  // 天気：気象庁の宮城県の予報。天気・降水確率は「東部」、気温は「仙台」
+  const WX_URL = 'https://www.jma.go.jp/bosai/forecast/data/forecast/040000.json';
+  const WX_AREA = '040010', WX_CITY = '34392';
+  const WX_CACHE_KEY = 'jozenji-weather-v1';
   const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
 
   // テスト用: ?now=2026-11-11T08:05 と ?data=xxx.json で時刻とデータを差し替えられる
   const qs = new URLSearchParams(location.search);
   const fixedNow = qs.get('now') ? new Date(qs.get('now') + '+09:00') : null;
   const dataUrl = qs.get('data') || DATA_URL;
+  const wxUrl = qs.get('wx') || WX_URL;   // テスト用: ?wx=保存した予報.json
   // テスト用のパラメータは月間カレンダーへのリンクにも引き継ぐ
   if (fixedNow || qs.get('data')) document.getElementById('calbtn').href = 'calendar.html' + location.search;
 
   let data = null, lastFetchOk = null, fetchFailed = false, pageIdx = 0, pageTimer = null, lastKey = '';
+  let wx = null;   // { published, days: { 'YYYY-MM-DD': { weather, code, pops:{'06':10,...}, popDay, max, min } } }
 
   // 端末の時刻設定に関係なく日本時間で扱う
   function nowJST() {
@@ -325,13 +372,14 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
     document.getElementById('clock').textContent = `${n.h}:${pad(n.mi)}`;
     document.body.classList.toggle('night', NIGHT[0] > NIGHT[1] ? (n.h >= NIGHT[0] || n.h < NIGHT[1]) : (n.h >= NIGHT[0] && n.h < NIGHT[1]));
     // 中身は日付・分単位の状態が変わったときだけ作り直す
-    const key = `${today}|${Math.floor(nowMin / 5)}|${data ? data.generated_at : ''}|${fetchFailed}`;
+    const key = `${today}|${Math.floor(nowMin / 5)}|${data ? data.generated_at : ''}|${fetchFailed}|${wx ? wx.published : ''}`;
     if (!force && key === lastKey) return;
     lastKey = key;
 
     document.getElementById('d').textContent = `${n.mo}/${n.d}`;
     const { clinic, timed, ongoing } = classify(today, nowMin);
     const total = timed.length + ongoing.length;
+    renderWx(today, n);
     renderClinic(today, n);
     document.getElementById('w').textContent = data ? `${WEEK[n.wd]}曜日 · 今日の予定 ${total}件` : `${WEEK[n.wd]}曜日`;
 
@@ -366,9 +414,125 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
     }
 
     const st = document.getElementById('status');
-    st.textContent = data && data.data_updated_at
+    st.textContent = (data && data.data_updated_at
       ? `定禅寺通りイベントカレンダー · 更新 ${md(data.data_updated_at.slice(0, 10))} ${data.data_updated_at.slice(11, 16)}`
-      : '定禅寺通りイベントカレンダー';
+      : '定禅寺通りイベントカレンダー')
+      + (wx ? ` · 天気：気象庁 ${md(wx.published.slice(0, 10))} ${+wx.published.slice(11, 13)}時発表` : '');
+  }
+
+  // ===== 天気 =====
+  // 気象庁の府県天気予報（JSON）を、日付ごとの天気・6時間ごとの降水確率・最高/最低気温に直す
+  function parseWx(raw) {
+    const days = {};
+    const day = t => (days[t.slice(0, 10)] ||= {});
+    const short = raw[0];
+    for (const ts of short.timeSeries) {
+      const td = ts.timeDefines;
+      for (const a of ts.areas) {
+        const c = a.area.code;
+        if (c === WX_AREA && a.weathers) td.forEach((t, i) => Object.assign(day(t), {
+          weather: a.weathers[i].replace(/\s+/g, ''), code: (a.weatherCodes || [])[i] || '' }));
+        if (c === WX_AREA && a.pops) td.forEach((t, i) => {
+          if (a.pops[i] !== '') (day(t).pops ||= {})[t.slice(11, 13)] = +a.pops[i]; });
+        if (c === WX_CITY && a.temps) {
+          // 1日に2つ並ぶ。09時が日中の最高、00時が朝の最低。
+          // ただし最高のあとに並ぶ00時は、朝が過ぎて最低の予報がない日の埋め草（最高と同じ値）なので使わない
+          const hasMax = {};
+          td.forEach((t, i) => {
+            const v = a.temps[i], d = t.slice(0, 10);
+            if (v === '') return;
+            if (t.slice(11, 13) === '00') { if (!hasMax[d]) day(t).min = +v; }
+            else { day(t).max = +v; hasMax[d] = true; }
+          });
+        }
+      }
+    }
+    // 週間予報で、足りないところ（明後日以降の気温や、1日の降水確率）を補う
+    const week = raw[1];
+    for (const ts of (week && week.timeSeries) || []) {
+      const td = ts.timeDefines;
+      for (const a of ts.areas) {
+        const c = a.area.code;
+        if (c === WX_CITY && a.tempsMax) td.forEach((t, i) => {
+          const d = day(t);
+          if (a.tempsMax[i] !== '' && d.max == null) d.max = +a.tempsMax[i];
+          if (a.tempsMin[i] !== '' && d.min == null) d.min = +a.tempsMin[i];
+        });
+        if (c === WX_AREA && a.weatherCodes) td.forEach((t, i) => {
+          const d = day(t);
+          if (!d.code) d.code = a.weatherCodes[i];
+          if (a.pops && a.pops[i] !== '' && d.popDay == null) d.popDay = +a.pops[i];
+        });
+      }
+    }
+    return { published: short.reportDatetime, days };
+  }
+
+  // 天気の絵。主な天気（コードの百の位）と、文にある「のち・時々」の天気を小さく添える
+  function wxIcon(code, text) {
+    const main = { '1': 'sun', '2': 'cloud', '3': 'rain', '4': 'snow' }[String(code)[0]] || '';
+    const E = { sun: '☀️', cloud: '☁️', rain: '☔', snow: '⛄' };
+    let sub = '';
+    if (text) {
+      if (main !== 'snow' && /雪/.test(text)) sub = 'snow';
+      else if (main !== 'rain' && main !== 'snow' && /雨/.test(text)) sub = 'rain';
+      else if (main === 'sun' && /くもり/.test(text)) sub = 'cloud';
+      else if (main === 'cloud' && /晴/.test(text)) sub = 'sun';
+    }
+    return { main: E[main] || '', sub: E[sub] || '' };
+  }
+
+  function wxCell(label, d, today, n) {
+    const c = el('div', 'wxd');
+    const top = el('div', 'top');
+    top.append(el('span', 'lb', label));
+    const ic = wxIcon(d.code, d.weather);
+    const icn = el('span', 'ic', ic.main);
+    if (ic.sub) icn.append(el('small', '', ic.sub));
+    top.append(icn);
+    const tp = el('span', 'tp');
+    tp.append(el('span', 'hi', d.max != null ? `${d.max}°` : '−'), el('i', '', '/'), el('span', 'lo', d.min != null ? `${d.min}°` : '−'));
+    top.append(tp);
+    c.append(top);
+    if (d.weather) { const tx = el('div', 'tx', d.weather); tx.title = d.weather; c.append(tx); }
+    const pp = el('div', 'pp');
+    if (d.pops) {
+      // 6〜12時を午前、12〜18時を午後、18〜24時を夜として出す。今日の過ぎた時間帯は「−」
+      [['06', '午前'], ['12', '午後'], ['18', '夜']].forEach(([h, name]) => {
+        const v = d.pops[h];
+        const s = el('span', '', name);
+        s.append(el('b', v == null ? 'none' : v >= 50 ? 'wet' : '', v == null ? '−' : `${v}%`));
+        pp.append(s);
+      });
+    } else if (d.popDay != null) {
+      const s = el('span', '', '降水');
+      s.append(el('b', d.popDay >= 50 ? 'wet' : '', `${d.popDay}%`));
+      pp.append(s);
+    }
+    if (pp.children.length) c.append(pp);
+    return c;
+  }
+
+  function renderWx(today, n) {
+    const box = document.getElementById('wx');
+    box.textContent = '';
+    if (!wx) return;
+    const tomorrow = addDays(today, 1);
+    const a = wx.days[today], b = wx.days[tomorrow];
+    if (!a && !b) return;   // 予報が古すぎる（今日・明日の分がない）ときは出さない
+    box.append(a ? wxCell('今日', a, today, n) : el('div'), b ? wxCell('明日', b, today, n) : el('div'));
+  }
+
+  async function loadWx() {
+    try {
+      const r = await fetch(wxUrl, { cache: 'no-cache' });
+      if (!r.ok) throw new Error(r.status);
+      wx = parseWx(await r.json());
+      try { localStorage.setItem(WX_CACHE_KEY, JSON.stringify(wx)); } catch (_) {}
+    } catch (err) {
+      if (!wx) { try { const c = localStorage.getItem(WX_CACHE_KEY); if (c) wx = JSON.parse(c); } catch (_) {} }
+    }
+    render(true);
   }
 
   // 健診（一番町健診クリニック）の今日の受付状況。カレンダー本体と同じ ○△× の表し方
@@ -444,7 +608,7 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
   async function keepAwake() {
     try { if ('wakeLock' in navigator && document.visibilityState === 'visible') lock = await navigator.wakeLock.request('screen'); } catch (_) {}
   }
-  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { keepAwake(); load(); } });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { keepAwake(); load(); loadWx(); } });
 
   // 毎日決まった時刻にページを読み直して、ページ自体の更新も取り込む
   const bootDay = nowJST().d;
@@ -454,9 +618,9 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
   }, 60e3);
 
   setInterval(() => render(false), 15e3);
-  setInterval(load, REFETCH_MIN * 60e3);
+  setInterval(() => { load(); loadWx(); }, REFETCH_MIN * 60e3);
   window.addEventListener('resize', () => render(true));
-  load(); keepAwake();
+  load(); loadWx(); keepAwake();
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
