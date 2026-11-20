@@ -32,7 +32,7 @@ from llm import extract_events, html_to_text
 log = logging.getLogger(__name__)
 ROOT = Path(__file__).resolve().parent.parent
 UA = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) "
-      "Chrome/130.0 Safari/537.36 jozenji-display-test")
+      "Chrome/130.0 Safari/537.36 jozenji-calendar")
 
 
 # ---------------------------------------------------------------- 共通

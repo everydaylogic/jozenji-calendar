@@ -1,4 +1,4 @@
-name: イベントデータの更新（試験）
+name: イベントデータの更新
 
 on:
   workflow_dispatch:
@@ -96,7 +96,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "変更なし"
           else
-            git commit -m "events.json を更新（$(TZ=Asia/Tokyo date +%F)・試験）"
+            git commit -m "events.json を更新（$(TZ=Asia/Tokyo date +%F)）"
             # 天気予報の更新が途中で入っていることがあるので、取り込んでから送る
             for i in 1 2 3; do git pull -q --rebase && git push && break; sleep 10; done
           fi

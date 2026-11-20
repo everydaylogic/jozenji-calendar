@@ -1,4 +1,4 @@
-"""定禅寺通りイベントカレンダー（試験版）の更新。GitHub Actions から週1回（または手動で）動かす。
+"""定禅寺通りイベントカレンダー（jozenji-calendar）の更新。GitHub Actions から週1回（または手動で）動かす。
 
   python updater/run.py                  # 全サイト
   python updater/run.py --only mitsukoshi,morisanho   # 一部だけ（LLMを使わないサイトの確認など）

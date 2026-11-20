@@ -1,12 +1,18 @@
-# 定禅寺通りイベントカレンダー（試験版）
+# 定禅寺通りイベントカレンダー
 
-本番 [jozenji-display](https://github.com/everydaylogic/jozenji-display) のデータ更新を、
-Claude ではなく **GitHub Actions ＋ ローカルLLM（Ollama）** で回せるかを確かめるためのリポジトリです。
+公開ページ：https://everydaylogic.github.io/jozenji-calendar/
+
+定禅寺通りまわりのイベント（Rensa・東京エレクトロンホール宮城・仙台三越 催物場・勾当台公園）と
+一番町健診クリニックの健診日を、**GitHub Actions ＋ ローカルLLM（Ollama）** で週1回自動で集めて表示します。
+Claude のサブスクリプションが無くても動き続けます。
+
+Claude が更新している [jozenji-display](https://github.com/everydaylogic/jozenji-display)（本番）も並行して動いており、
+毎回その結果と見比べています（このリポジトリは、もとは本番の控え `jozenji-display-test` として作ったもの）。
 画面（`docs/`）と公開用データの作り方（`tools/build_events_json.py`）は本番と同じです。
 
 ## 動かし方
 
-1. 「Actions」タブ →「イベントデータの更新（試験）」→「Run workflow」
+1. 「Actions」タブ →「イベントデータの更新」→「Run workflow」
 2. 終わったら、その実行のページの一番下に結果（サイトごとの件数・時間・本番との違い）が出ます
 3. 変更があれば `docs/events.json` が更新され、Pages に反映されます
 
