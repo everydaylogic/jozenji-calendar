@@ -218,6 +218,10 @@ main{flex:0 0 auto}
   const WX_URL = 'https://www.jma.go.jp/bosai/forecast/data/forecast/040000.json';
   const WX_AREA = '040010', WX_CITY = '34392';
   const WX_CACHE_KEY = 'jozenji-weather-v1';
+  // 今日の最低気温は予報に無いので、仙台の観測（アメダス）の「0時から今までの最低」を使う。
+  // 夕方（17時の発表）からは今日の最高も予報から消えるので、観測の「今日の最高」で補う
+  const OBS_BASE = 'https://www.jma.go.jp/bosai/amedas/data/';
+  const OBS_POINT = '34392';   // 仙台
   const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
 
   // テスト用: ?now=2026-11-11T08:05 と ?data=xxx.json で時刻とデータを差し替えられる
@@ -225,11 +229,13 @@ main{flex:0 0 auto}
   const fixedNow = qs.get('now') ? new Date(qs.get('now') + '+09:00') : null;
   const dataUrl = qs.get('data') || DATA_URL;
   const wxUrl = qs.get('wx') || WX_URL;   // テスト用: ?wx=保存した予報.json
+  const obsUrl = qs.get('obs');            // テスト用: ?obs=保存した観測.json
   // テスト用のパラメータは月間カレンダーへのリンクにも引き継ぐ
   if (fixedNow || qs.get('data')) document.getElementById('calbtn').href = 'calendar.html' + location.search;
 
   let data = null, lastFetchOk = null, fetchFailed = false, pageIdx = 0, pageTimer = null, lastKey = '';
   let wx = null;   // { published, days: { 'YYYY-MM-DD': { weather, code, pops:{'06':10,...}, popDay, max, min } } }
+  let obs = null;  // { date: 'YYYY-MM-DD', at: 'YYYYMMDDhhmmss', max, min }  仙台の今日の観測
 
   // 端末の時刻設定に関係なく日本時間で扱う
   function nowJST() {
@@ -402,7 +408,7 @@ main{flex:0 0 auto}
     document.getElementById('clock').textContent = `${n.h}:${pad(n.mi)}`;
     document.body.classList.toggle('night', NIGHT[0] > NIGHT[1] ? (n.h >= NIGHT[0] || n.h < NIGHT[1]) : (n.h >= NIGHT[0] && n.h < NIGHT[1]));
     // 中身は日付・分単位の状態が変わったときだけ作り直す
-    const key = `${today}|${Math.floor(nowMin / 5)}|${data ? data.generated_at : ''}|${fetchFailed}|${wx ? wx.published : ''}`;
+    const key = `${today}|${Math.floor(nowMin / 5)}|${data ? data.generated_at : ''}|${fetchFailed}|${wx ? wx.published : ''}|${obs ? obs.at : ''}`;
     if (!force && key === lastKey) return;
     lastKey = key;
 
@@ -533,6 +539,7 @@ main{flex:0 0 auto}
     if (ic.sub) icn.append(el('small', '', ic.sub));
     top.append(icn);
     const tp = el('span', 'tp');
+    if (d.obsNote) tp.title = d.obsNote;
     if (d.min == null) { const hi = el('span', 'hi'); hi.append(el('small', '', '最高 '), d.max != null ? `${d.max}°` : '−'); tp.append(hi); }
     else tp.append(el('span', 'hi', d.max != null ? `${d.max}°` : '−'), el('i', '', '/'), el('span', 'lo', `${d.min}°`));
     top.append(tp);
@@ -561,8 +568,18 @@ main{flex:0 0 auto}
     box.textContent = '';
     if (!wx) return;
     const tomorrow = addDays(today, 1);
-    const a = wx.days[today], b = wx.days[tomorrow];
+    let a = wx.days[today];
+    const b = wx.days[tomorrow];
     if (!a && !b) return;   // 予報が古すぎる（今日・明日の分がない）ときは出さない
+    if (a && obs && obs.date === today) {
+      // 最高：予報があれば予報（ただし、もう予報より上がっていれば観測）。予報が消えた夕方以降は観測
+      let max = a.max;
+      if (obs.max != null) max = max == null ? Math.round(obs.max) : Math.max(max, Math.round(obs.max));
+      // 最低：予報には無いので、観測の0時から今までの最低
+      const min = a.min != null ? a.min : obs.min != null ? Math.round(obs.min) : null;
+      a = Object.assign({}, a, { max, min,
+        obsNote: `今日の最低は仙台の観測（0時から${+obs.at.slice(8, 10)}:${obs.at.slice(10, 12)}まで）` + (a.max == null ? '、最高も観測' : '') });
+    }
     box.append(a ? wxCell('今日', a, today, n) : el('div'), b ? wxCell('明日', b, today, n) : el('div'));
   }
 
@@ -575,7 +592,31 @@ main{flex:0 0 auto}
     } catch (err) {
       if (!wx) { try { const c = localStorage.getItem(WX_CACHE_KEY); if (c) wx = JSON.parse(c); } catch (_) {} }
     }
+    await loadObs();
     render(true);
+  }
+
+  // 仙台の観測：最新の時刻を調べ、その時刻を含む3時間ごとのファイルの、いちばん新しい記録を読む
+  async function loadObs() {
+    try {
+      let url = obsUrl;
+      if (!url) {
+        const t = (await (await fetch(OBS_BASE + 'latest_time.txt', { cache: 'no-cache' })).text()).trim();   // 例 2026-11-22T06:20:00+09:00
+        const m = t.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2})/);
+        if (!m) throw new Error('time');
+        url = `${OBS_BASE}point/${OBS_POINT}/${m[1]}${m[2]}${m[3]}_${pad(Math.floor(+m[4] / 3) * 3)}.json`;
+      }
+      const r = await fetch(url, { cache: 'no-cache' });
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      const k = Object.keys(d).sort().pop();
+      // 0:00 ちょうどの記録の最高・最低は前の日の分なので使わない
+      if (!k || k.slice(8, 12) === '0000') { obs = null; return; }
+      const v = x => (Array.isArray(x) && x[0] != null && x[1] === 0) ? x[0] : null;   // [値, 品質]。品質0が正常
+      obs = { date: `${k.slice(0, 4)}-${k.slice(4, 6)}-${k.slice(6, 8)}`, at: k, max: v(d[k].maxTemp), min: v(d[k].minTemp) };
+    } catch (err) {
+      // 読めなければ前に読んだ観測のまま。日付が今日でなければ使われない（今日の最低は出さず、最高は予報だけ）
+    }
   }
 
   // 健診（一番町健診クリニック）の今日の状況。女性・男性ごとに、午前・午後をやっているかを○×で出す
