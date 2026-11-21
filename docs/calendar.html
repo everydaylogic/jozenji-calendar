@@ -143,7 +143,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
   <div class="cal" id="cal" role="grid" aria-label="月間カレンダー"></div>
   <section class="detail" id="detail" aria-live="polite"></section>
   <div class="legend" id="legend"></div>
-  <footer><span id="status">定禅寺通りイベントカレンダー</span><span id="hint"></span></footer>
+  <footer><span id="status"></span><span id="hint"></span></footer>
 </div>
 <script>
 (() => {
@@ -368,7 +368,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
       lg.append(x);
     }
     const u = data.data_updated_at;
-    document.getElementById('status').textContent = u ? `定禅寺通りイベントカレンダー · 更新 ${md(u.slice(0, 10))} ${u.slice(11, 16)}` : '定禅寺通りイベントカレンダー';
+    document.getElementById('status').textContent = u ? `予定 ${md(u.slice(0, 10))} ${u.slice(11, 16)}更新` : '';
     document.getElementById('hint').textContent = kiosk ? `日付を押すと詳しく出ます · ${IDLE_BACK_SEC / 60}分触らないと今日の画面に戻ります` : '日付を押すと詳しく出ます';
   }
 

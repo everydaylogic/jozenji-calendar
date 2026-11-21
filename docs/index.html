@@ -211,7 +211,7 @@ main{flex:0 0 auto}
   <main id="main"></main>
   <div id="ahead"></div>
   <footer>
-    <div class="fl"><span class="pager" id="pager"></span><span id="status">定禅寺通りイベントカレンダー</span></div>
+    <div class="fl"><span class="pager" id="pager"></span><span id="status"></span></div>
     <a class="cbtn" id="calbtn" href="calendar.html">月間 ›</a>
   </footer>
 </div>
@@ -486,10 +486,11 @@ main{flex:0 0 auto}
     renderAhead(today);
 
     const st = document.getElementById('status');
-    st.textContent = (data && data.data_updated_at
-      ? `定禅寺通りイベントカレンダー · 更新 ${md(data.data_updated_at.slice(0, 10))} ${data.data_updated_at.slice(11, 16)}`
-      : '定禅寺通りイベントカレンダー')
-      + (wx ? ` · 天気：気象庁 ${md(wx.published.slice(0, 10))} ${+wx.published.slice(11, 13)}時発表` : '');
+    // 予定の更新日時と、天気の出典（気象庁）・発表時刻。天気の発表が今日なら日付は省く
+    const parts = [];
+    if (data && data.data_updated_at) parts.push(`予定 ${md(data.data_updated_at.slice(0, 10))} ${data.data_updated_at.slice(11, 16)}更新`);
+    if (wx) parts.push(`天気 気象庁 ${wx.published.slice(0, 10) === today ? '' : md(wx.published.slice(0, 10)) + ' '}${+wx.published.slice(11, 13)}時発表`);
+    st.textContent = parts.join(' · ');
   }
 
   // ===== 天気 =====
