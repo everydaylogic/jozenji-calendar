@@ -186,6 +186,17 @@ main{flex:0 0 auto}
   .date span{font-size:13px}
   .card .title{font-size:16px}
 }
+/* スマホ（縦・横とも）：1画面に収めず、縦にスクロールして今日とこれからの1週間を全部見せる。
+   タブレット・パソコンは、つけっぱなしの掲示用に1画面に収める */
+@media (max-width: 600px), (orientation: landscape) and (max-height: 520px) {
+  html,body{height:auto;overflow:visible}
+  #app{height:auto;min-height:100vh;min-height:100dvh}
+  main{height:auto !important;overflow:visible}
+  .page{position:static}
+  .empty{height:auto;padding:18px 0}
+  #ahead{flex:none;overflow:visible;padding-bottom:8px}
+  footer{position:sticky;bottom:0;z-index:2;background:var(--bg);padding:8px 0 max(4px,env(safe-area-inset-bottom));margin-top:auto}
+}
 </style>
 </head>
 <body>
@@ -210,6 +221,8 @@ main{flex:0 0 auto}
   // ===== 設定 =====
   const DATA_URL = 'events.json';
   const REFETCH_MIN = 30;          // 予定を取り直す間隔（分）
+  // スマホはスクロールで見せる（CSS の同じ条件と合わせる）
+  const SCROLL_MQ = '(max-width: 600px), (orientation: landscape) and (max-height: 520px)';
   const PAGE_SEC = 12;             // 1画面に収まらないときの切り替え間隔（秒）
   const NIGHT = [23, 6];           // この時間帯は画面を暗くする（時）
   const DAILY_RELOAD_HOUR = 4;     // 毎日この時刻にページを読み直す（時）
@@ -441,11 +454,21 @@ main{flex:0 0 auto}
       if (data) e.append(el('b', '', '今日の予定はありません'));
       else if (fetchFailed) { e.append(el('b', '', '予定を読み込めません')); e.append(el('span', '', 'Wi-Fiの接続を確認してください')); }
       else e.append(el('b', '', '読み込み中…'));
-      main.style.height = matchMedia('(orientation: landscape) and (min-height: 521px)').matches ? '' : '72px';
+      main.style.height = matchMedia('(orientation: landscape) and (min-height: 521px)').matches || matchMedia(SCROLL_MQ).matches ? '' : '72px';
       main.append(e);
       showPage([]);
     } else {
       const wide = matchMedia('(orientation: landscape) and (min-height: 521px)').matches;
+      if (matchMedia(SCROLL_MQ).matches) {
+        // スマホ：ページは分けず、全部並べてスクロールで見せる
+        main.classList.remove('compact');
+        main.style.height = '';
+        main.textContent = '';
+        const page = el('div', 'page');
+        blocks.forEach(b => page.append(b));
+        main.append(page);
+        showPage([]);
+      } else {
       if (!wide) {
         // 縦向き・スマホ：今日の予定は中身の高さだけ（多すぎるときは画面の半分まで。入りきらない分はページを切り替えて出す）
         main.style.height = 'auto';
@@ -458,6 +481,7 @@ main{flex:0 0 auto}
         main.style.height = Math.min(need + 10, window.innerHeight * 0.45) + 'px';
       }
       showPage(paginate(blocks));
+      }
     }
     renderAhead(today);
 
@@ -647,7 +671,8 @@ main{flex:0 0 auto}
     const S = srcMap();
     const c = data.clinic;
     box.append(el('div', 'sech', 'これからの1週間'));
-    const fits = () => box.scrollHeight <= box.clientHeight + 1;
+    const scroll = matchMedia(SCROLL_MQ).matches;   // スマホは高さを気にせず7日分すべて
+    const fits = () => scroll || box.scrollHeight <= box.clientHeight + 1;
     for (let k = 1; k <= 7; k++) {
       const day = addDays(today, k);
       const [y, m, d] = day.split('-').map(Number);
