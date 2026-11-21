@@ -54,9 +54,10 @@ body.night .wrap{opacity:.35}
 .num{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
 .dh.sun .num{color:var(--sun)}.dh.sat .num{color:var(--sat)}
 .dh.today .num{background:var(--accent);color:#0f1115;border-radius:999px;padding:0 5px;margin-left:-2px}
-.kc{display:inline-flex;gap:1px;font-size:11px;font-weight:700;line-height:1.2;white-space:nowrap}
-.kc .l{display:none;color:var(--muted);font-weight:400;margin-right:1px}
-.open{color:var(--ok)}.am{color:var(--warn)}.closed,.unknown{color:var(--off)}
+.kc{display:inline-grid;grid-template-columns:auto auto;column-gap:1px;font-size:9px;font-weight:700;line-height:1.05;white-space:nowrap}
+.kc .l{display:none;color:var(--muted);font-weight:400;margin-right:2px}
+.kc.off{display:inline-block;font-size:11px;line-height:1.2}
+.ok{color:var(--ok)}.ng,.closed{color:var(--off)}
 /* 何日も続く催しの帯（スマホでも小さな文字で名前を入れる） */
 .bar{margin:0 2px;padding:1px 4px;border-radius:3px;font-size:10px;line-height:1.35;color:var(--text);
   background:var(--bgc);box-shadow:inset 2px 0 0 var(--c);
@@ -72,7 +73,7 @@ body.night .wrap{opacity:.35}
 .sg .more{font-size:10px;color:var(--muted);line-height:7px}
 @media (min-width:640px){
   .week{min-height:104px;row-gap:3px}
-  .kc{font-size:12px;gap:4px}.kc .l{display:inline}
+  .kc{grid-template-columns:auto auto auto;column-gap:2px;font-size:11px}.kc .l{display:inline}.kc.off{font-size:12px}
   .num{font-size:15px}
   .bar{padding:2px 6px;font-size:12px;border-radius:4px;margin:0 3px;
     box-shadow:inset 3px 0 0 var(--c)}
@@ -101,12 +102,12 @@ body.night .wrap{opacity:.35}
 .detail{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:10px;align-content:start}
 .detail h2{font-size:18px;margin:0;display:flex;align-items:baseline;gap:8px}
 .detail h2 small{font-size:13px;color:var(--muted);font-weight:400}
-.clin{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;background:#15241a;border-radius:8px;padding:8px 12px}
+.clin{display:grid;grid-template-columns:auto 4.5em 4.5em;justify-content:start;column-gap:10px;row-gap:2px;align-items:center;
+  background:#15241a;border-radius:8px;padding:8px 14px;white-space:nowrap}
 .clin .h{font-weight:700;color:#8ce99a;font-size:15px}
-.clin .fs{display:grid;gap:2px}
-.clin .f{display:flex;gap:6px;align-items:center;font-size:14px}
-.clin .f small{color:var(--sub);font-size:12px;width:2.6em}
-.clin .mk{font-weight:700;width:1em;text-align:center}
+.clin .ch{font-size:13px;color:var(--muted);text-align:center}
+.clin .fl{font-size:14px;color:var(--sub)}
+.clin .ok,.clin .ng{text-align:center;font-size:19px;font-weight:700;line-height:1.15}
 .evs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .ev{display:flex;gap:10px;background:var(--card);border-radius:8px;padding:8px 10px}
 .ev .tm{width:52px;flex:none;display:flex;flex-direction:column}
@@ -149,8 +150,6 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
   const NIGHT = [23, 6];
   const CACHE_KEY = 'jozenji-events-v1';
   const WD = ['日', '月', '火', '水', '木', '金', '土'];
-  const MARK = { open: '○', am: '△', closed: '×', unknown: '－' };
-  const MARK_TEXT = { open: '午前・午後', am: '午前のみ', closed: '休診', unknown: '予定なし' };
 
   const qs = new URLSearchParams(location.search);
   const fixedNow = qs.get('now') ? new Date(qs.get('now') + '+09:00') : null;
@@ -207,13 +206,16 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
 
   let data = null, SRC = {}, months = [], ym = '', sel = '', today = '';
 
-  function clinicKinds(ds) {
+  // 健診：女性・男性ごとに、午前・午後をやっているか（土曜は午前のみ）。予定表にない日は null
+  function clinicDay(ds) {
     const c = data && data.clinic;
     const st = c && c.days && c.days[ds];
     if (!st || !st.some(Boolean)) return null;
     const sat = dow(ds) === 6;
-    return st.map(s => !s ? 'unknown' : s === 'closed' ? 'closed' : (s === 'pm_closed' || sat) ? 'am' : 'open');
+    return st.map(s => ({ am: s === 'open' || s === 'pm_closed', pm: s === 'open' && !sat }));
   }
+  const mark = v => el('span', v ? 'ok' : 'ng', v ? '○' : '×');
+  const floorName = i => ((data.clinic.floors[i] || '').replace(/（.*/, ''));
 
   const evOn = ds => data.events.filter(e => e.start <= ds && ds <= e.end);
   function shortTitle(e) {
@@ -257,11 +259,11 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
       const h = el('div', `dh${d.out ? ' out' : ''}${d.w === 0 ? ' sun' : d.w === 6 ? ' sat' : ''}${d.ds === today ? ' today' : ''}`);
       h.style.gridColumn = i + 1;
       h.append(el('span', 'num', String(d.n)));
-      const k = clinicKinds(d.ds);
+      const k = clinicDay(d.ds);
       if (k) {
         const kc = el('span', 'kc');
-        if (k.every(x => x === 'closed' || x === 'unknown')) kc.append(el('span', 'closed', '休'));
-        else k.forEach((x, j) => { const s = el('span', x); s.append(el('span', 'l', (data.clinic.floors[j] || '').slice(0, 1)), document.createTextNode(MARK[x])); kc.append(s); });
+        if (k.every(f => !f.am && !f.pm)) { kc.className = 'kc off'; kc.append(el('span', 'closed', '休')); }
+        else k.forEach((f, j) => kc.append(el('span', 'l', floorName(j).slice(0, 1)), mark(f.am), mark(f.pm)));
         h.append(kc);
       }
       w.append(h);
@@ -321,18 +323,11 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     const h = el('h2', '', `${md(sel)}（${WD[dow(sel)]}）`);
     if (sel === today) h.append(el('small', '', '今日'));
     box.append(h);
-    const k = clinicKinds(sel);
+    const k = clinicDay(sel);
     if (k) {
       const c = el('div', 'clin');
-      c.append(el('span', 'h', '健診'));
-      const fs = el('div', 'fs');
-      k.forEach((x, i) => {
-        const f = el('div', 'f');
-        f.append(el('small', '', data.clinic.floors[i] || ''), el('span', 'mk ' + x, MARK[x]),
-          el('span', x === 'closed' || x === 'unknown' ? 'closed' : '', x === 'am' && dow(sel) === 6 ? '午前のみ（土曜）' : MARK_TEXT[x]));
-        fs.append(f);
-      });
-      c.append(fs);
+      c.append(el('span', 'h', '健診'), el('span', 'ch', '午前'), el('span', 'ch', '午後'));
+      k.forEach((f, i) => c.append(el('span', 'fl', floorName(i)), mark(f.am), mark(f.pm)));
       box.append(c);
     }
     const list = evOn(sel).map(e => ({ e, t: e.start === e.end ? parseTime(e.time) : null }))
@@ -366,8 +361,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     });
     if (data.clinic) {
       const x = el('span');
-      x.append(document.createTextNode('健診：'), el('b', 'open', '○'), document.createTextNode('午前・午後 '),
-        el('b', 'am', '△'), document.createTextNode('午前のみ '), el('b', 'closed', '×'), document.createTextNode('休診（左が女性・右が男性）'));
+      x.append(document.createTextNode('健診（日付の右の○×）：上が女性・下が男性、左が午前・右が午後'));
       lg.append(x);
     }
     const u = data.data_updated_at;
