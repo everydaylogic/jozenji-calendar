@@ -54,9 +54,12 @@ body.night .wrap{opacity:.35}
 .num{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2}
 .dh.sun .num{color:var(--sun)}.dh.sat .num{color:var(--sat)}
 .dh.today .num{background:var(--accent);color:#0f1115;border-radius:999px;padding:0 5px;margin-left:-2px}
-.kc{display:inline-grid;grid-template-columns:auto auto;column-gap:1px;font-size:9px;font-weight:700;line-height:1.05;white-space:nowrap}
-.kc .l{display:none;color:var(--muted);font-weight:400;margin-right:2px}
-.kc.off{display:inline-block;font-size:11px;line-height:1.2}
+/* 健診：「女○×／男○○」（左が午前・右が午後）。両方休みの日は「休診」 */
+.kc{display:inline-grid;grid-template-columns:auto auto auto;column-gap:1px;font-size:10px;font-weight:700;line-height:1.1;white-space:nowrap}
+.kc .l{color:var(--sub);font-weight:400;margin-right:2px}
+.kc.off{display:inline-block;font-size:10px;font-weight:400;line-height:1.2}
+/* スマホはマスが狭いので、健診は日付の下に置く */
+@media (max-width:639px){ .dh{flex-direction:column;justify-content:flex-start;gap:1px} }
 .ok{color:var(--ok)}.ng,.closed{color:var(--off)}
 /* 何日も続く催しの帯（スマホでも小さな文字で名前を入れる） */
 .bar{margin:0 2px;padding:1px 4px;border-radius:3px;font-size:10px;line-height:1.35;color:var(--text);
@@ -73,7 +76,7 @@ body.night .wrap{opacity:.35}
 .sg .more{font-size:10px;color:var(--muted);line-height:7px}
 @media (min-width:640px){
   .week{min-height:104px;row-gap:3px}
-  .kc{grid-template-columns:auto auto auto;column-gap:2px;font-size:11px}.kc .l{display:inline}.kc.off{font-size:12px}
+  .kc{column-gap:2px;font-size:11px}.kc.off{font-size:12px}
   .num{font-size:15px}
   .bar{padding:2px 6px;font-size:12px;border-radius:4px;margin:0 3px;
     box-shadow:inset 3px 0 0 var(--c)}
@@ -262,7 +265,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
       const k = clinicDay(d.ds);
       if (k) {
         const kc = el('span', 'kc');
-        if (k.every(f => !f.am && !f.pm)) { kc.className = 'kc off'; kc.append(el('span', 'closed', '休')); }
+        if (k.every(f => !f.am && !f.pm)) { kc.className = 'kc off'; kc.append(el('span', 'closed', '休診')); }
         else k.forEach((f, j) => kc.append(el('span', 'l', floorName(j).slice(0, 1)), mark(f.am), mark(f.pm)));
         h.append(kc);
       }
@@ -361,7 +364,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     });
     if (data.clinic) {
       const x = el('span');
-      x.append(document.createTextNode('健診（日付の右の○×）：上が女性・下が男性、左が午前・右が午後'));
+      x.append(document.createTextNode('健診：女＝女性・男＝男性、○×は左が午前・右が午後'));
       lg.append(x);
     }
     const u = data.data_updated_at;
