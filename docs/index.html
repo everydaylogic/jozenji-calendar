@@ -109,15 +109,17 @@ footer .fl #status{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .top3{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:8px;flex:none}
 .top3 .wx{gap:8px}
 @media (max-width: 559px) { .top3{display:flex;flex-direction:column} }
-.ctab{display:grid;grid-template-columns:auto 1fr 1fr;align-content:center;align-items:center;column-gap:10px;row-gap:2px;
-  background:var(--clinic-bg);border-radius:8px;padding:8px 14px;white-space:nowrap}
+/* 健診：「女性 午前のみ　男性 午前・午後」。緑＝午前・午後、黄＝午前のみ、灰＝休診（月間カレンダーと同じ色） */
+.ctab{display:flex;align-items:center;gap:14px;background:var(--clinic-bg);border-radius:8px;padding:9px 14px;white-space:nowrap}
 .ctab:empty{display:none}
 .ctab .h{font-size:15px;font-weight:700;color:var(--clinic-text)}
-.ctab .ch{font-size:13px;color:var(--muted);text-align:center}
-.ctab .fl{font-size:14px;color:var(--sub)}
-.ctab .ok,.ctab .ng{text-align:center;font-size:20px;font-weight:700;line-height:1.15}
-.wxd .tp small{font-size:12px;font-weight:400;color:var(--muted)}
-.ctab .ok{color:#6cc47e}.ctab .ng{color:#5d6763}
+.ctab .fs{display:flex;flex-wrap:wrap;column-gap:16px;row-gap:2px;min-width:0}
+.ctab .f{font-size:15px;color:var(--sub)}
+.ctab .f b{margin-left:6px;font-weight:700}
+.ctab .full{color:#6cc47e}.ctab .am{color:#e6b84c}.ctab .shut{color:#7d8784;font-weight:400}
+/* タブレットでは天気の横の狭い欄なので、女性・男性を2行に */
+@media (min-width: 560px) { .top3 .ctab{flex-direction:column;align-items:flex-start;justify-content:center;gap:4px}
+  .top3 .ctab .fs{flex-direction:column} .top3 .ctab .f{font-size:16px} }
 /* 「今日」「これからの1週間」の見出し */
 .sech{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:var(--sub);flex:none;margin:2px 2px 0}
 .sech::after{content:"";flex:1;height:1px;background:var(--line)}
@@ -181,7 +183,9 @@ main{flex:0 0 auto}
   .wxd .tx{display:none}
   .wxd .pp{gap:8px;font-size:12px}
   .ctab{padding:5px 10px}
-  .ctab .ok,.ctab .ng{font-size:16px}
+  .top3 .ctab{flex-direction:column;align-items:flex-start;gap:3px}
+  .top3 .ctab .fs{flex-direction:column}
+  .ctab .f{font-size:14px}
   .date b,.clock{font-size:30px}
   .date span{font-size:13px}
   .card .title{font-size:16px}
@@ -644,21 +648,26 @@ main{flex:0 0 auto}
     }
   }
 
-  // 健診（一番町健診クリニック）の今日の状況。女性・男性ごとに、午前・午後をやっているかを○×で出す
+  // 健診（一番町健診クリニック）の今日の状況を、女性・男性ごとに「午前・午後／午前のみ／休診」で出す
+  // 土曜は午後が無いので、やっている日は「午前のみ」
+  const clinicWord = (s, sat) => s === 'open' && !sat ? ['full', '午前・午後'] : (s === 'open' || s === 'pm_closed') ? ['am', '午前のみ'] : ['shut', '休診'];
   function renderClinic(today, n) {
     const box = document.getElementById('clinic');
     box.textContent = '';
     const c = data && data.clinic;
     const st = c && c.days && c.days[today];
     if (!st || !st.some(Boolean)) return;
-    const sat = n.wd === 6;   // 土曜は午前のみ（午後は平日だけ）
-    const am = st.map(s => s === 'open' || s === 'pm_closed');
-    const pm = st.map(s => s === 'open' && !sat);
-    box.append(el('span', 'h', '健診'), el('span', 'ch', '午前'), el('span', 'ch', '午後'));
-    st.forEach((s, i) => {
-      box.append(el('span', 'fl', (c.floors[i] || '').replace(/（.*/, '')),
-        el('span', am[i] ? 'ok' : 'ng', am[i] ? '○' : '×'), el('span', pm[i] ? 'ok' : 'ng', pm[i] ? '○' : '×'));
+    const sat = n.wd === 6;
+    box.append(el('span', 'h', '健診'));
+    const fs = el('span', 'fs');
+    if (st.every(s => clinicWord(s, sat)[0] === 'shut')) fs.append(el('b', 'shut', '休診'));
+    else st.forEach((s, i) => {
+      const [cls, word] = clinicWord(s, sat);
+      const f = el('span', 'f', (c.floors[i] || '').replace(/（.*/, ''));
+      f.append(el('b', cls, word));
+      fs.append(f);
     });
+    box.append(fs);
   }
 
   // これからの1週間（明日〜6日後）。日ごとに、その日に始まる予定を並べる

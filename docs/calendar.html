@@ -11,7 +11,7 @@
 <style>
 :root{
   --bg:#0f1115; --surface:#16191e; --card:#1a1d23; --line:#2a2e36; --text:#f3f4f6; --sub:#c9ccd1; --muted:#9aa0a8;
-  --sun:#ff8a8a; --sat:#7eaef2; --ok:#6cc47e; --warn:#f0a457; --off:#6f7a75; --sel:#2c2716; --accent:#4dabf7;
+  --sun:#ff8a8a; --sat:#7eaef2; --ok:#6cc47e; --am:#e6b84c; --warn:#f0a457; --off:#6f7a75; --sel:#2c2716; --accent:#4dabf7;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);
@@ -60,7 +60,8 @@ body.night .wrap{opacity:.35}
 .kc.off{display:inline-block;font-size:10px;font-weight:400;line-height:1.2}
 /* スマホはマスが狭いので、健診は日付の下に置く */
 @media (max-width:639px){ .dh{flex-direction:column;justify-content:flex-start;gap:1px} }
-.ok{color:var(--ok)}.ng,.closed{color:var(--off)}
+/* 色は今日の画面と同じ：緑＝午前・午後、黄＝午前のみ、灰＝休み */
+.ok{color:var(--ok)}.ok.am{color:var(--am)}.ng,.closed{color:var(--off)}
 /* 何日も続く催しの帯（スマホでも小さな文字で名前を入れる） */
 .bar{margin:0 2px;padding:1px 4px;border-radius:3px;font-size:10px;line-height:1.35;color:var(--text);
   background:var(--bgc);box-shadow:inset 2px 0 0 var(--c);
@@ -105,12 +106,12 @@ body.night .wrap{opacity:.35}
 .detail{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:10px;align-content:start}
 .detail h2{font-size:18px;margin:0;display:flex;align-items:baseline;gap:8px}
 .detail h2 small{font-size:13px;color:var(--muted);font-weight:400}
-.clin{display:grid;grid-template-columns:auto 4.5em 4.5em;justify-content:start;column-gap:10px;row-gap:2px;align-items:center;
+.clin{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
   background:#15241a;border-radius:8px;padding:8px 14px;white-space:nowrap}
 .clin .h{font-weight:700;color:#8ce99a;font-size:15px}
-.clin .ch{font-size:13px;color:var(--muted);text-align:center}
-.clin .fl{font-size:14px;color:var(--sub)}
-.clin .ok,.clin .ng{text-align:center;font-size:19px;font-weight:700;line-height:1.15}
+.clin .f{font-size:15px;color:var(--sub)}
+.clin .f b{margin-left:6px;font-weight:700}
+.clin .full{color:var(--ok)}.clin .am{color:var(--am)}.clin .shut{color:var(--off);font-weight:400}
 .evs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .ev{display:flex;gap:10px;background:var(--card);border-radius:8px;padding:8px 10px}
 .ev .tm{width:52px;flex:none;display:flex;flex-direction:column}
@@ -217,7 +218,9 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     const sat = dow(ds) === 6;
     return st.map(s => ({ am: s === 'open' || s === 'pm_closed', pm: s === 'open' && !sat }));
   }
-  const mark = v => el('span', v ? 'ok' : 'ng', v ? '○' : '×');
+  // マスの○×。午前のみの日は○を黄色にする（今日の画面の「午前のみ」と同じ色）
+  const marks = f => [el('span', f.am ? 'ok' + (f.pm ? '' : ' am') : 'ng', f.am ? '○' : '×'), el('span', f.pm ? 'ok' : 'ng', f.pm ? '○' : '×')];
+  const clinicWord = f => f.am && f.pm ? ['full', '午前・午後'] : f.am ? ['am', '午前のみ'] : ['shut', '休診'];
   const floorName = i => ((data.clinic.floors[i] || '').replace(/（.*/, ''));
 
   const evOn = ds => data.events.filter(e => e.start <= ds && ds <= e.end);
@@ -266,7 +269,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
       if (k) {
         const kc = el('span', 'kc');
         if (k.every(f => !f.am && !f.pm)) { kc.className = 'kc off'; kc.append(el('span', 'closed', '休診')); }
-        else k.forEach((f, j) => kc.append(el('span', 'l', floorName(j).slice(0, 1)), mark(f.am), mark(f.pm)));
+        else k.forEach((f, j) => kc.append(el('span', 'l', floorName(j).slice(0, 1)), ...marks(f)));
         h.append(kc);
       }
       w.append(h);
@@ -329,8 +332,9 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     const k = clinicDay(sel);
     if (k) {
       const c = el('div', 'clin');
-      c.append(el('span', 'h', '健診'), el('span', 'ch', '午前'), el('span', 'ch', '午後'));
-      k.forEach((f, i) => c.append(el('span', 'fl', floorName(i)), mark(f.am), mark(f.pm)));
+      c.append(el('span', 'h', '健診'));
+      if (k.every(f => !f.am && !f.pm)) c.append(el('b', 'shut', '休診'));
+      else k.forEach((f, i) => { const [cls, word] = clinicWord(f); const s = el('span', 'f', floorName(i)); s.append(el('b', cls, word)); c.append(s); });
       box.append(c);
     }
     const list = evOn(sel).map(e => ({ e, t: e.start === e.end ? parseTime(e.time) : null }))
@@ -364,7 +368,8 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     });
     if (data.clinic) {
       const x = el('span');
-      x.append(document.createTextNode('健診：女＝女性・男＝男性、○×は左が午前・右が午後'));
+      x.append(document.createTextNode('健診：女＝女性・男＝男性、○×は左が午前・右が午後（'),
+        el('b', 'ok am', '○'), document.createTextNode('黄色は午前のみ）'));
       lg.append(x);
     }
     const u = data.data_updated_at;
