@@ -122,7 +122,7 @@
    "is_new": false
   },
   {
-   "title": "ポルフェス126 ポルカドットスティングレイ 2026冬ツアー(仮)",
+   "title": "ポルカドットスティングレイ / STILL PINK TOUR 2026",
    "date_start": "2026-11-20",
    "date_end": "",
    "time": "17:30 / 18:30",
@@ -150,6 +150,16 @@
    "url": "http://www.rensa.jp/schedule_more/?index=3359",
    "note": "INFO EDWARD LIVE",
    "is_new": false
+  },
+  {
+   "title": "NeW sTyle / 24曲ニュースタ ノンストップライブ",
+   "date_start": "2026-11-25",
+   "date_end": "",
+   "time": "18:15 / 18:40",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3388",
+   "note": "INFO NeW sTyle entertainment",
+   "is_new": true
   },
   {
    "title": "cinema staff 【8/29 振替公演】 / 前衛懐古主義 part 5",
@@ -202,6 +212,16 @@
    "is_new": false
   },
   {
+   "title": "NeW sTyle / 全グループ30分枠 撮影楽曲2曲確定ライブ",
+   "date_start": "2026-12-08",
+   "date_end": "",
+   "time": "18:00 / 18:25",
+   "venue": "Rensa",
+   "url": "http://www.rensa.jp/schedule_more/?index=3389",
+   "note": "INFO NeW sTyle entertainment",
+   "is_new": true
+  },
+  {
    "title": "竹原ピストル 弾き語りツアー ”One for the show 2026”",
    "date_start": "2026-12-15",
    "date_end": "",
@@ -215,7 +235,7 @@
    "title": "中田裕二 / TOUR 26 \"砂上の楼閣\"",
    "date_start": "2026-12-17",
    "date_end": "",
-   "time": "開場18:15|開演19:00",
+   "time": "18:15 / 19:00",
    "venue": "Rensa",
    "url": "http://www.rensa.jp/schedule_more/?index=3348",
    "note": "INFO ジー・アイ・ピーお問合せフォーム",
@@ -342,9 +362,9 @@
    "is_new": false
   }
  ],
- "fetched_at": "2026-11-15T10:19:56+09:00",
+ "fetched_at": "2026-11-22T10:36:28+09:00",
  "kind": "llm",
- "last_ok_at": "2026-11-15T10:19:56+09:00",
+ "last_ok_at": "2026-11-22T10:36:28+09:00",
  "message": "",
  "name": "Rensa",
  "ok": true,

@@ -92,11 +92,21 @@
    "manual": true,
    "pdf_month": "2026-11",
    "is_new": false
+  },
+  {
+   "title": "開催概要|サロン・デュ・ショコラ 2027",
+   "date_start": "2027-01-20",
+   "date_end": "2027-02-14",
+   "time": "最終日は18:00まで",
+   "venue": "仙台三越 本館7階 ホール",
+   "url": "https://www.mitsukoshi.mistore.jp/sendai/shops/other/other_shopnews/salon_du_chocolat/event-guide.html",
+   "note": "",
+   "is_new": true
   }
  ],
- "fetched_at": "2026-11-15T10:20:21+09:00",
+ "fetched_at": "2026-11-22T10:36:52+09:00",
  "kind": "mitsukoshi_json",
- "last_ok_at": "2026-11-15T10:20:21+09:00",
+ "last_ok_at": "2026-11-22T10:36:52+09:00",
  "manual_month": "2026-11",
  "message": "",
  "name": "仙台三越 催物場",

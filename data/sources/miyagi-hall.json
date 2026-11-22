@@ -101,13 +101,14 @@
    "is_new": false
   },
   {
-   "title": "三山ひろしコンサート2026",
+   "title": "三山ひろしコンサート2026 ~スーパービタミンボイス~",
    "date_start": "2026-11-17",
    "date_end": "",
-   "time": "開場13:00 開演13:30",
+   "time": "開演13:30",
    "venue": "東京エレクトロンホール宮城",
-   "url": "https://miyagi-hall.jp/events/19993/",
-   "note": "売り切れ 全席指定 7,000円  ※未就学児入場不可",
+   "url": "https://miyagi-hall.jp/schedules/22199/",
+   "note": "トラスト企画クリエート",
+   "from_schedule": true,
    "is_new": false
   },
   {
@@ -136,10 +137,11 @@
    "title": "石井竜也with山形交響楽団オーケストラコンサート",
    "date_start": "2026-11-21",
    "date_end": "",
-   "time": "開場16:00/開演17:00",
+   "time": "開演17:00",
    "venue": "東京エレクトロンホール宮城",
-   "url": "https://miyagi-hall.jp/events/21981/",
-   "note": "発売中 プレミアムシート(特典付き)14,100円、指定席9,220",
+   "url": "https://miyagi-hall.jp/schedules/22199/",
+   "note": "ニイタカプラス",
+   "from_schedule": true,
    "is_new": false
   },
   {
@@ -255,9 +257,9 @@
    "is_new": false
   }
  ],
- "fetched_at": "2026-11-15T10:20:01+09:00",
+ "fetched_at": "2026-11-22T10:36:33+09:00",
  "kind": "llm",
- "last_ok_at": "2026-11-15T10:20:01+09:00",
+ "last_ok_at": "2026-11-22T10:36:33+09:00",
  "message": "",
  "name": "東京エレクトロンホール宮城",
  "ok": true,
