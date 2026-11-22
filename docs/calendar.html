@@ -8,6 +8,26 @@
 <title>月間カレンダー</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
+<script>
+// 表示（自動・ライト・ダーク）。選んだものはこの端末に保存する（今日の画面と月間カレンダーで共通）。
+// 自動は端末のライト／ダークに合わせる。描く前に決めて、白黒が一瞬入れ替わらないようにする
+(function () {
+  var KEY = 'jozenji-theme', mq = window.matchMedia ? matchMedia('(prefers-color-scheme: light)') : null;
+  function pref() { try { var v = localStorage.getItem(KEY); return v === 'light' || v === 'dark' ? v : 'auto'; } catch (e) { return 'auto'; } }
+  function apply() {
+    var p = pref(), t = p === 'auto' ? (mq && mq.matches ? 'light' : 'dark') : p, r = document.documentElement;
+    var changed = r.getAttribute('data-theme') !== t;
+    r.setAttribute('data-theme', t);
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', t === 'light' ? '#f4f5f7' : '#0f1115');
+    if (changed) document.dispatchEvent(new Event('themechange'));
+  }
+  window.jzTheme = { pref: pref, apply: apply, set: function (p) { try { localStorage.setItem(KEY, p); } catch (e) {} apply(); } };
+  if (mq) { if (mq.addEventListener) mq.addEventListener('change', apply); else if (mq.addListener) mq.addListener(apply); }
+  window.addEventListener('storage', function (e) { if (e.key === KEY) apply(); });   // 別のタブで変えたとき
+  apply();
+})();
+</script>
 <style>
 :root{
   --bg:#0f1115; --surface:#16191e; --card:#1a1d23; --line:#2a2e36; --text:#f3f4f6; --sub:#c9ccd1; --muted:#9aa0a8;
@@ -129,6 +149,38 @@ body.night .wrap{opacity:.35}
 .legend .s i{width:9px;height:9px;border-radius:3px;background:var(--c)}
 .legend b{font-size:13px}
 footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* ===== 白ベース（ライト） ===== */
+:root{--btn-line:#3a3f48}
+:root[data-theme="light"]{
+  --bg:#f4f5f7; --surface:#ffffff; --card:#ffffff; --line:#dde1e6; --text:#1b1f24; --sub:#454b53; --muted:#6b727c;
+  --sun:#e03131; --sat:#1c7ed6; --ok:#2b8a3e; --am:#a86400; --warn:#c25e00; --off:#9aa1a8; --sel:#fff3c4; --accent:#1c7ed6; --btn-line:#ccd1d7;
+}
+[data-theme="light"] body.night .wrap{opacity:1}
+[data-theme="light"] .btn,[data-theme="light"] .ev .pd{border-color:var(--btn-line)}
+[data-theme="light"] .day.out{background:#eceef1}
+[data-theme="light"] .day.today{background:#e8f2fd}
+[data-theme="light"] .day.sel{box-shadow:inset 0 0 0 2px #d4b03a}
+[data-theme="light"] .dh.today .num{color:#fff}
+[data-theme="light"] .clin{background:#e8f5ec}
+[data-theme="light"] .clin .h{color:#1f7a3a}
+footer{align-items:center}
+footer .thm{margin-left:auto}
+
+/* 「◐ 表示」ボタンとメニュー */
+.thm{position:relative;flex:none;display:flex}
+.thbtn{font:inherit;font-size:14px;font-weight:700;color:var(--sub);background:var(--card);border:1px solid var(--btn-line);border-radius:8px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.thbtn:focus-visible,.thmenu button:focus-visible{outline:2px solid #4dabf7;outline-offset:2px}
+.thmenu{position:absolute;right:0;bottom:calc(100% + 8px);min-width:210px;background:var(--card);border:1px solid var(--btn-line);border-radius:12px;
+  padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.35);display:flex;flex-direction:column;z-index:20}
+.thmenu[hidden]{display:none}
+.thmenu button{display:flex;align-items:center;gap:10px;font:inherit;font-size:15px;color:var(--text);background:none;border:0;border-radius:8px;padding:10px 12px;text-align:left;cursor:pointer}
+.thmenu button .ck{width:16px;color:#1c7ed6;font-weight:700}
+.thmenu button small{display:block;font-size:11px;color:var(--muted)}
+.thmenu button.on{background:rgba(28,126,214,.14)}
+[data-theme="light"] .thmenu{box-shadow:0 8px 24px rgba(0,0,0,.14)}
+/* 白ベースの夜：白いまま薄くすると見づらいので、上から暗くかぶせる */
+[data-theme="light"] body.night::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.55);pointer-events:none;z-index:50}
 </style>
 </head>
 <body>
@@ -144,7 +196,7 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
   <div class="cal" id="cal" role="grid" aria-label="月間カレンダー"></div>
   <section class="detail" id="detail" aria-live="polite"></section>
   <div class="legend" id="legend"></div>
-  <footer><span id="status"></span><span id="hint"></span></footer>
+  <footer><span id="status"></span><span id="hint"></span><div class="thm"><button class="thbtn" id="thbtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="thmenu">◐ 表示</button><div class="thmenu" id="thmenu" role="menu" aria-label="表示" hidden><button type="button" role="menuitemradio" data-v="auto"><span class="ck"></span><span>自動<small>端末の設定に合わせる</small></span></button><button type="button" role="menuitemradio" data-v="light"><span class="ck"></span><span>ライト</span></button><button type="button" role="menuitemradio" data-v="dark"><span class="ck"></span><span>ダーク</span></button></div></div></footer>
 </div>
 <script>
 (() => {
@@ -279,7 +331,8 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
       b.style.gridColumn = `${s + 1} / ${t + 2}`; b.style.gridRow = lane + 2;
       const col = (SRC[e.s] || {}).color || '#adb5bd';
       b.style.setProperty('--c', col);
-      b.style.setProperty('--bgc', mixHex(col, '#16191e', 0.28));
+      // 帯の地の色は、会場の色を背景に薄く混ぜたもの（白ベースでは白に混ぜる）
+      b.style.setProperty('--bgc', document.documentElement.getAttribute('data-theme') === 'light' ? mixHex(col, '#ffffff', 0.22) : mixHex(col, '#16191e', 0.28));
       b.append(el('span', '', shortTitle(e)));
       b.title = `${e.title}（${md(e.start)}〜${md(e.end)}）`;
       w.append(b);
@@ -388,6 +441,8 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     if (!sel) sel = today;
     renderMonth(); renderDetail(); renderLegend();
   }
+  // 表示（ライト／ダーク）が変わったら、帯の色を作り直す
+  document.addEventListener('themechange', () => { if (data) renderMonth(); });
 
   document.getElementById('cal').addEventListener('click', ev => {
     const b = ev.target.closest('.day'); if (!b) return;
@@ -418,6 +473,29 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
     }
     renderAll();
   })();
+})();
+</script>
+<script>
+// 「◐ 表示」のメニュー
+(function () {
+  var btn = document.getElementById('thbtn'), menu = document.getElementById('thmenu');
+  if (!btn || !menu) return;
+  function sync() {
+    var p = window.jzTheme.pref();
+    menu.querySelectorAll('[data-v]').forEach(function (b) {
+      var on = b.getAttribute('data-v') === p;
+      b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false');
+      b.querySelector('.ck').textContent = on ? '✓' : '';
+    });
+  }
+  function open(v) { menu.hidden = !v; btn.setAttribute('aria-expanded', v ? 'true' : 'false'); if (v) sync(); }
+  btn.addEventListener('click', function (e) { e.stopPropagation(); open(menu.hidden); });
+  menu.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-v]'); if (!b) return;
+    window.jzTheme.set(b.getAttribute('data-v')); sync(); open(false);
+  });
+  document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target)) open(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') open(false); });
 })();
 </script>
 </body>
