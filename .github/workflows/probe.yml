@@ -10,7 +10,7 @@ jobs:
           import re, requests
           from bs4 import BeautifulSoup
           H={'User-Agent':'Mozilla/5.0 (jozenji-calendar)'}
-          for u in ['https://www.j-streetjazz.com/','https://www.aoba-matsuri.com/','https://michinoku-yosakoi.net/']:
+          for u in ['https://www.j-streetjazz.com/about/','https://www.aoba-matsuri.com/outline/','https://michinoku-yosakoi.net/overview/schedule/','https://michinoku-yosakoi.net/overview/']:
               try:
                   r=requests.get(u,headers=H,timeout=30); r.encoding=r.apparent_encoding
                   s=BeautifulSoup(r.text,'html.parser')
@@ -22,9 +22,9 @@ jobs:
                   for m in re.finditer(pat,txt):
                       print('  ..',txt[max(0,m.start()-60):m.end()+60].replace('\n',' '))
                       seen+=1
-                      if seen>=12: break
+                      if seen>=10: break
                   links=sorted({a.get('href') for a in s.find_all('a') if a.get('href') and re.search(r'outline|about|gaiyou|概要|schedule|program|info|access|kisei|規制',a.get('href'),re.I)})
-                  print('  links:',links[:20])
+                  print('  links:',links[:20]); print('  HEAD:',txt[:900])
               except Exception as e:
                   print('=====',u,'ERR',e)
           PY
