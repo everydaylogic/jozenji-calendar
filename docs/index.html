@@ -162,7 +162,7 @@ main{flex:0 0 auto}
 @media (orientation: landscape) and (min-height: 521px) {
   #app{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
     grid-template-rows:auto auto auto auto minmax(0,1fr) auto;
-    grid-template-areas:"head ahead" "top3 ahead" "badges ahead" "todayh ahead" "main ahead" "foot ahead";
+    grid-template-areas:"head ahead" "top3 ahead" "badges ahead" "todayh ahead" "main ahead" "foot foot";
     column-gap:22px;row-gap:10px}
   header{grid-area:head} .top3{grid-area:top3} #badges{grid-area:badges}
   #todayh{grid-area:todayh} main{grid-area:main;height:auto !important} footer{grid-area:foot}
@@ -187,7 +187,7 @@ main{flex:0 0 auto}
 @media (orientation: landscape) and (max-height: 520px) {
   #app{display:grid;grid-template-columns:236px minmax(0,1fr);
     grid-template-rows:auto auto auto 1fr auto;
-    grid-template-areas:"head todayh" "top3 main" "top3 ahead" "badges ahead" "foot ahead";
+    grid-template-areas:"head todayh" "top3 main" "top3 ahead" "badges ahead" "foot foot";
     column-gap:14px;row-gap:6px;padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left))}
   header{grid-area:head} .top3{grid-area:top3;display:flex;flex-direction:column;gap:6px;align-self:start}
   #badges{grid-area:badges} #todayh{grid-area:todayh} main{grid-area:main;align-self:start} footer{grid-area:foot}
@@ -244,13 +244,10 @@ main{flex:0 0 auto}
 [data-theme="light"] .dayh.sun{color:#e03131}
 [data-theme="light"] .dayh.sat{color:#1c7ed6}
 [data-theme="light"] #ahead{box-shadow:0 1px 2px rgba(0,0,0,.07)}
-footer .thm{margin-left:auto}
 /* スマホ：画面下の帯はボタンだけ。更新日時は1週間の一覧の下に出す */
 .stline{display:none}
 @media (max-width: 600px), (orientation: landscape) and (max-height: 520px) {
   footer .fl{display:none}
-  footer .thm{margin-left:0}
-  .thmenu{left:0;right:auto}
   .stline{display:block;font-size:11px;color:var(--muted);padding:10px 2px 4px;text-align:center}
 }
 
@@ -268,6 +265,23 @@ footer .thm{margin-left:auto}
 [data-theme="light"] .thmenu{box-shadow:0 8px 24px rgba(0,0,0,.14)}
 /* 白ベースの夜：白いまま薄くすると見づらいので、上から暗くかぶせる */
 [data-theme="light"] body.night::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.55);pointer-events:none;z-index:50}
+
+/* 画面下：左に「◐ 表示」、右に「月間 ›」（月間カレンダーの「‹ 今日」と同じ位置）。タブレットは真ん中に更新日時 */
+footer .thm{order:-1}
+footer .fl{flex:1;align-items:center}
+footer .thmenu{left:0;right:auto}
+/* これからの1週間：明日は今日に近い大きさ、明後日以降は小さく控えめに */
+.dayg.tmr{margin-bottom:6px}
+.dayg.tmr .dayh{font-size:16px;color:var(--text)}
+.dayg.tmr .arow{min-height:34px}
+.dayg.tmr .arow .when{font-size:15px;color:var(--text);font-weight:700}
+.dayg.tmr .arow .name{font-size:17px;font-weight:700}
+.dayg.tmr .arow .vn{font-size:13px}
+.dayg:not(.tmr) .dayh{font-size:13px}
+.dayg:not(.tmr) .arow{min-height:24px;padding:2px 4px}
+.dayg:not(.tmr) .arow .when{font-size:12px;color:var(--muted)}
+.dayg:not(.tmr) .arow .name{font-size:13px;color:var(--sub)}
+.dayg:not(.tmr) .arow .vn{font-size:11px}
 </style>
 </head>
 <body>
@@ -757,7 +771,7 @@ footer .thm{margin-left:auto}
       const day = addDays(today, k);
       const [y, m, d] = day.split('-').map(Number);
       const wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
-      const g = el('div', 'dayg');
+      const g = el('div', 'dayg' + (k === 1 ? ' tmr' : ''));   // 明日は大きく、明後日以降は控えめに
       const hd = el('div', 'dayh' + (wd === 0 ? ' sun' : wd === 6 ? ' sat' : ''), `${k === 1 ? '明日 ' : ''}${m}/${d}（${WEEK[wd]}）`);
       const st = c && c.days && c.days[day];
       if (st && st.some(Boolean)) {

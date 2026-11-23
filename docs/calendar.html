@@ -164,8 +164,6 @@ footer{font-size:11px;color:var(--muted);display:flex;justify-content:space-betw
 [data-theme="light"] .dh.today .num{color:#fff}
 [data-theme="light"] .clin{background:#e8f5ec}
 [data-theme="light"] .clin .h{color:#1f7a3a}
-footer{align-items:center}
-footer .thm{margin-left:auto}
 
 /* 「◐ 表示」ボタンとメニュー */
 .thm{position:relative;flex:none;display:flex}
@@ -181,6 +179,17 @@ footer .thm{margin-left:auto}
 [data-theme="light"] .thmenu{box-shadow:0 8px 24px rgba(0,0,0,.14)}
 /* 白ベースの夜：白いまま薄くすると見づらいので、上から暗くかぶせる */
 [data-theme="light"] body.night::after{content:"";position:fixed;inset:0;background:rgba(0,0,0,.55);pointer-events:none;z-index:50}
+
+/* 画面下に固定の帯：左に「◐ 表示」、右に「‹ 今日」（今日の画面の「月間 ›」と同じ位置） */
+.bbar{position:sticky;bottom:0;z-index:10;max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding:8px var(--bbar-x,14px) max(4px,env(safe-area-inset-bottom));background:var(--bg)}
+.bbar .thmenu{left:0;right:auto}
+.bbar .cbtn{flex:none;font-size:14px;font-weight:700;color:var(--text);background:var(--card);border:1px solid var(--btn-line);
+  border-radius:8px;height:44px;padding:0 14px;display:inline-flex;align-items:center;text-decoration:none}
+/* タブレット・パソコン（今日の画面が1画面に収まる大きさ）は、今日の画面と同じく下を10px空ける */
+@media (min-width: 601px) and (min-height: 521px) { .bbar{padding-bottom:max(10px,env(safe-area-inset-bottom))} }
+body.night .bbar{opacity:.35}
+[data-theme="light"] body.night .bbar{opacity:1}
 </style>
 </head>
 <body>
@@ -191,13 +200,13 @@ footer .thm{margin-left:auto}
       <h1 id="mlabel">----年--月</h1>
       <button class="btn" id="next" type="button" aria-label="次の月">›</button>
     </div>
-    <a class="btn" id="back" href="./">今日 ›</a>
   </div>
   <div class="cal" id="cal" role="grid" aria-label="月間カレンダー"></div>
   <section class="detail" id="detail" aria-live="polite"></section>
   <div class="legend" id="legend"></div>
-  <footer><span id="status"></span><span id="hint"></span><div class="thm"><button class="thbtn" id="thbtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="thmenu">◐ 表示</button><div class="thmenu" id="thmenu" role="menu" aria-label="表示" hidden><button type="button" role="menuitemradio" data-v="auto"><span class="ck"></span><span>自動<small>端末の設定に合わせる</small></span></button><button type="button" role="menuitemradio" data-v="light"><span class="ck"></span><span>ライト</span></button><button type="button" role="menuitemradio" data-v="dark"><span class="ck"></span><span>ダーク</span></button></div></div></footer>
+  <footer><span id="status"></span><span id="hint"></span></footer>
 </div>
+<nav class="bbar"><div class="thm"><button class="thbtn" id="thbtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="thmenu">◐ 表示</button><div class="thmenu" id="thmenu" role="menu" aria-label="表示" hidden><button type="button" role="menuitemradio" data-v="auto"><span class="ck"></span><span>自動<small>端末の設定に合わせる</small></span></button><button type="button" role="menuitemradio" data-v="light"><span class="ck"></span><span>ライト</span></button><button type="button" role="menuitemradio" data-v="dark"><span class="ck"></span><span>ダーク</span></button></div></div><a class="cbtn" id="back" href="./">‹ 今日</a></nav>
 <script>
 (() => {
   'use strict';
