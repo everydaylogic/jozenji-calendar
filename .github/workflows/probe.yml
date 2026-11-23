@@ -1,0 +1,30 @@
+name: 確認用（あとで消す）
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          pip install -q beautifulsoup4 requests
+          python3 - <<'PY'
+          import re, requests
+          from bs4 import BeautifulSoup
+          H={'User-Agent':'Mozilla/5.0 (jozenji-calendar)'}
+          for u in ['https://www.j-streetjazz.com/','https://www.aoba-matsuri.com/','https://michinoku-yosakoi.net/']:
+              try:
+                  r=requests.get(u,headers=H,timeout=30); r.encoding=r.apparent_encoding
+                  s=BeautifulSoup(r.text,'html.parser')
+                  for t in s(['script','style','noscript']): t.decompose()
+                  txt=re.sub(r'\s+',' ',s.get_text(' '))
+                  print('=====',u,r.status_code,len(txt),'title:',s.title.string if s.title else '')
+                  pat=r'(20\d\d|令和\s*\d+)\s*[年./]\s*\d{1,2}\s*[月./]\s*\d{1,2}|\d{1,2}\s*月\s*\d{1,2}\s*日|\d{1,2}\.\d{1,2}\s*\(?[A-Za-z]{3}'
+                  seen=0
+                  for m in re.finditer(pat,txt):
+                      print('  ..',txt[max(0,m.start()-60):m.end()+60].replace('\n',' '))
+                      seen+=1
+                      if seen>=12: break
+                  links=sorted({a.get('href') for a in s.find_all('a') if a.get('href') and re.search(r'outline|about|gaiyou|概要|schedule|program|info|access|kisei|規制',a.get('href'),re.I)})
+                  print('  links:',links[:20])
+              except Exception as e:
+                  print('=====',u,'ERR',e)
+          PY
