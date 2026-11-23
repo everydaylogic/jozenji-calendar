@@ -134,9 +134,10 @@ body.night .wrap{opacity:.35}
 .clin .full{color:var(--ok)}.clin .am{color:var(--am)}.clin .shut{color:var(--off);font-weight:400}
 .evs{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .ev{display:flex;gap:10px;background:var(--card);border-radius:8px;padding:8px 10px}
-.ev .tm{width:52px;flex:none;display:flex;flex-direction:column}
+.ev .tm{width:60px;flex:none;display:flex;flex-direction:column}
 .ev .tm b{font-size:16px;font-variant-numeric:tabular-nums}
 .ev .tm span{font-size:11px;color:var(--muted)}
+.ev .tm span.op{white-space:nowrap}
 .ev .m{flex:1;min-width:0;display:grid;gap:3px}
 .ev .ti{font-size:15px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}
 .ev .vn{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--sub)}
@@ -293,15 +294,20 @@ body.night .bbar{opacity:.35}
     if (!times.length) return null;
     let main = times[0], label = '';
     const kaien = s.indexOf('開演');
+    // 開場の時刻（Rensa の「開場 / 開演」や「開場17:30」）。車が来はじめる目安として出す
+    let open = null;
+    const om = s.match(/開場\s*(\d{1,2})[:：](\d{2})/);
+    if (om) open = { h: +om[1], m: +om[2] };
     if (/開場/.test(s) && kaien >= 0) { main = times.find(t => t.i > kaien) || times.filter(t => t.i < kaien).pop() || main; label = '開演'; }
     else if (kaien >= 0) label = '開演';
     const slash = s.match(/(\d{1,2})[:：](\d{2})\s*[\/／]\s*(\d{1,2})[:：](\d{2})/);
-    if (slash && kaien < 0) { main = { h: +slash[3], m: +slash[4] }; label = '開演'; }
+    if (slash && kaien < 0) { main = { h: +slash[3], m: +slash[4] }; open = { h: +slash[1], m: +slash[2] }; label = '開演'; }
     const rng = s.match(/(\d{1,2})[:：](\d{2})\s*[〜~\-－ー]\s*(\d{1,2})[:：](\d{2})/);
     if (rng) { main = { h: +rng[1], m: +rng[2] }; label = `〜${rng[3]}:${rng[4]}`; }
+    if (open && open.h * 60 + open.m >= main.h * 60 + main.m) open = null;
     const multi = (s.match(/[①②③④]/g) || []).length;
     if (multi > 1) label = `ほか${multi - 1}回`;
-    return { h: main.h, m: main.m, label };
+    return { h: main.h, m: main.m, label, open };
   }
 
   let data = null, SRC = {}, months = [], ym = '', sel = '', today = '';
@@ -446,7 +452,7 @@ body.night .bbar{opacity:.35}
     list.forEach(({ e, t }) => {
       const li = el('li', 'ev');
       const tm = el('div', 'tm');
-      if (t) { tm.append(el('b', '', `${t.h}:${pad(t.m)}`)); if (t.label) tm.append(el('span', '', t.label)); }
+      if (t) { tm.append(el('b', '', `${t.h}:${pad(t.m)}`)); if (t.label) tm.append(el('span', '', t.label)); if (t.open) tm.append(el('span', 'op', `開場 ${t.open.h}:${pad(t.open.m)}`)); }
       else tm.append(el('b', '', e.start === e.end ? '終日' : '会期中'));
       const m = el('div', 'm');
       m.append(el('div', 'ti', e.title));

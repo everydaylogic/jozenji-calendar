@@ -89,9 +89,10 @@ main{flex:1;min-height:0;position:relative;overflow:hidden}
 .sec{font-size:13px;color:var(--muted);margin:4px 2px 0}
 
 .card{display:flex;gap:12px;align-items:flex-start;background:var(--card);border-radius:8px;padding:10px 12px;flex:none}
-.card .t{width:62px;flex:none;display:flex;flex-direction:column;gap:2px}
+.card .t{width:66px;flex:none;display:flex;flex-direction:column;gap:2px}
 .card .t b{font-size:20px;line-height:1.15;font-variant-numeric:tabular-nums}
 .card .t span{font-size:12px;color:var(--muted)}
+.card .t span.op{white-space:nowrap}
 .card .m{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .card .title{font-size:17px;font-weight:700;line-height:1.35;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
@@ -406,19 +407,24 @@ footer .thmenu{left:0;right:auto}
     if (!times.length) return null;
     let main = times[0], label = '', end = null;
     const kaien = s.indexOf('開演');
+    // 開場の時刻（Rensa の「開場 / 開演」や「開場17:30」）。車が来はじめる目安として出す
+    let open = null;
+    const om = s.match(/開場\s*(\d{1,2})[:：](\d{2})/);
+    if (om) open = { h: +om[1], m: +om[2] };
     if (/開場/.test(s) && kaien >= 0) {
       const after = times.find(t => t.i > kaien) || times.filter(t => t.i < kaien).pop();
       if (after) main = after; label = '開演';
     } else if (kaien >= 0) label = '開演';
     // Rensa の「開場 / 開演」形式（例: 17:00 / 18:00）は後ろが開演
     const slash = s.match(/(\d{1,2})[:：](\d{2})\s*[\/／]\s*(\d{1,2})[:：](\d{2})/);
-    if (slash && kaien < 0) { main = { h: +slash[3], m: +slash[4] }; label = '開演'; }
+    if (slash && kaien < 0) { main = { h: +slash[3], m: +slash[4] }; open = { h: +slash[1], m: +slash[2] }; label = '開演'; }
     const rng = s.match(/(\d{1,2})[:：](\d{2})\s*[〜~\-－ー]\s*(\d{1,2})[:：](\d{2})/);
     if (rng) { main = { h: +rng[1], m: +rng[2] }; end = { h: +rng[3], m: +rng[4] }; label = `〜${rng[3]}:${rng[4]}`; }
+    if (open && open.h * 60 + open.m >= main.h * 60 + main.m) open = null;   // 開演より後の「開場」は取り違えなので出さない
     const multi = (s.match(/[①②③④]/g) || []).length;
     if (multi > 1) label = `ほか${multi - 1}回`;
     if (/最終日/.test(s)) return null; // 会期ものの注記は時刻扱いしない
-    return { h: main.h, m: main.m, end, label };
+    return { h: main.h, m: main.m, end, label, open };
   }
   const mins = t => t.h * 60 + t.m;
 
@@ -475,6 +481,7 @@ footer .thmenu{left:0;right:auto}
     const t = el('div', 't');
     t.append(el('b', '', item.t ? `${item.t.h}:${pad(item.t.m)}` : '終日'));
     if (item.t && item.t.label) t.append(el('span', '', item.t.label));
+    if (item.t && item.t.open) t.append(el('span', 'op', `開場 ${item.t.open.h}:${pad(item.t.open.m)}`));
     const m = el('div', 'm');
     m.append(el('div', 'title', item.title));
     const v = el('div', 'venue'); v.append(dot(item.color), el('span', '', item.venue || item.srcName));
@@ -843,7 +850,8 @@ footer .thmenu{left:0;right:auto}
       const rows = list.map(({ e, t }) => {
         const r = el('div', 'arow');
         r.append(el('span', 'when', t ? `${t.h}:${pad(t.m)}` : e.end > e.start ? `〜${md(e.end)}` : '終日'),
-          dot((S[e.s] || {}).color || '#adb5bd'), el('span', 'name', e.title), el('span', 'vn', shortVenue(e.s, S)));
+          dot((S[e.s] || {}).color || '#adb5bd'), el('span', 'name', e.title),
+          el('span', 'vn', shortVenue(e.s, S) + (t && t.open ? ` · 開場${t.open.h}:${pad(t.open.m)}` : '')));
         return r;
       });
       rows.forEach(r => g.append(r));
