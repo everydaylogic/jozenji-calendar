@@ -42,7 +42,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
   padding:max(14px,env(safe-area-inset-top)) 14px max(10px,env(safe-area-inset-bottom));gap:10px}
 body.night #app{opacity:.35}
 
-header{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+/* 日付の数字と時計を同じ行（上の端）にそろえる。曜日・件数の行は日付の下 */
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
 .date{display:flex;flex-direction:column;gap:2px}
 .date b{font-size:34px;line-height:1;font-weight:700;letter-spacing:.01em}
 .date span{font-size:14px;color:var(--sub)}
