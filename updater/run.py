@@ -167,6 +167,7 @@ def main() -> int:
             doc["events"] = finalize(res["events"], doc.get("events", []), ctx)
             doc.update(res.get("extra", {}))
             doc.update(ok=True, fetched_at=now, last_ok_at=now, message=res.get("message", ""))
+            PROBLEMS.extend(f"{sid}：{p}" for p in res.get("problems", []))   # 取得はできたが知らせたいこと
             status = "成功"
         except Exception as e:  # noqa: BLE001
             log.exception("%s failed", sid)

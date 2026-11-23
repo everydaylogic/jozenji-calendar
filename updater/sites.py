@@ -434,6 +434,89 @@ KOTODAIPARK_HINT = ("勾当台公園のイベントを紹介する記事の一�
                     "毎週・毎月の定例の市（旬の香り市・朝市・夕市など）は出力しない。url は記事のリンク。")
 
 
+# 定禅寺通りの大きな祭り。公式サイトの「開催日 2027年5月15日（土）・5月16日（日）」のような書き方を、AIを使わずに読む。
+# 読み間違いを防ぐため、(1) 例年の月であること、(2) 曜日が書いてあれば暦と合うこと、(3) 今日以降であること、
+# (4) 会期が4日以内であること、(5) 近くに「開催・日程・日時」の言葉があること、をすべて満たす日付だけを使う。
+FESTIVALS = [
+    {"title": "定禅寺ストリートジャズフェスティバル", "months": (9,), "venue": "定禅寺通・勾当台公園ほか",
+     "urls": ("https://www.j-streetjazz.com/", "https://www.j-streetjazz.com/about/")},
+    {"title": "仙台・青葉まつり", "months": (5,), "venue": "定禅寺通・西公園ほか",
+     "urls": ("https://www.aoba-matsuri.com/outline/", "https://www.aoba-matsuri.com/")},
+    {"title": "仙台みちのくYOSAKOIまつり", "months": (10,), "venue": "勾当台公園・仙台市中心部ほか",
+     "urls": ("https://michinoku-yosakoi.net/overview/", "https://michinoku-yosakoi.net/")},
+]
+FEST_WARN_DAYS = 75     # 例年の月の何日前になっても日付が読めなければ知らせるか
+_WD = "月火水木金土日"
+_FEST_RE = re.compile(
+    r"(?:(20\d\d)\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日\s*(?:\(\s*([月火水木金土日])[^)]{0,3}\))?"
+    r"(?:\s*[・、〜~\-–—]\s*(?:(\d{1,2})\s*月\s*)?(\d{1,2})\s*日\s*(?:\(\s*([月火水木金土日])[^)]{0,3}\))?)?")
+
+
+def parse_fest_dates(text: str, months: tuple, today: date) -> list[tuple[str, str]]:
+    """ページの文から、祭りの会期の候補 (開始, 終了) を返す（条件に合うものだけ）。"""
+    t = nf(re.sub(r"\s+", " ", text))
+    out = []
+    for m in _FEST_RE.finditer(t):
+        y0, mo, d1, w1, mo2, d2, w2 = m.groups()
+        mo, d1 = int(mo), int(d1)
+        if mo not in months:
+            continue
+        ctx_txt = t[max(0, m.start() - 60): m.end() + 30]
+        if not re.search(r"開催|日程|日時|会期", ctx_txt):
+            continue
+        years = [int(y0)] if y0 else [today.year, today.year + 1]
+        for y in years:
+            try:
+                start = date(y, mo, d1)
+                end = start
+                if d2:
+                    end = date(y, int(mo2 or mo), int(d2))
+            except ValueError:
+                continue
+            if end < start or (end - start).days > 3:
+                continue
+            if w1 and _WD[start.weekday()] != w1:
+                continue
+            if w2 and _WD[end.weekday()] != w2:
+                continue
+            if not y0 and not w1:          # 年も曜日も無い日付は、年を決められないので使わない
+                continue
+            if end < today:
+                continue
+            out.append((start.isoformat(), end.isoformat() if end != start else ""))
+            break
+    return out
+
+
+def festivals(ctx: Ctx) -> tuple[list[dict], list[str], list[str]]:
+    """(見つかった祭り, メモ, 知らせること) を返す。"""
+    found, notes, problems = [], [], []
+    for f in FESTIVALS:
+        cands, errs = [], 0
+        for u in f["urls"]:
+            try:
+                cands += parse_fest_dates(BeautifulSoup(ctx.get(u, timeout=30).text, "html.parser").get_text(" "),
+                                          f["months"], ctx.today)
+            except Exception as e:  # noqa: BLE001
+                errs += 1
+                log.warning("festival %s %s: %s", f["title"], u, e)
+        if cands:
+            # 会期（2日以上）として書かれたものを優先し、次に多く書かれているもの、同じなら早いもの
+            best = sorted(set(cands), key=lambda c: (c[1] == "", -cands.count(c), c[0]))[0]
+            found.append({"title": f["title"], "date_start": best[0], "date_end": best[1], "time": "",
+                          "venue": f["venue"], "url": f["urls"][0], "note": "公式サイトの開催日", "big": True})
+            continue
+        if errs == len(f["urls"]):
+            notes.append(f"{f['title']}の公式サイトを読めませんでした")
+        # 例年の月が近いのに日付が読めないときは知らせる（発表がまだか、サイトの書き方が変わった）
+        y = ctx.today.year if ctx.today.month <= f["months"][0] else ctx.today.year + 1
+        first = date(y, f["months"][0], 1)
+        if 0 <= (first - ctx.today).days <= FEST_WARN_DAYS:
+            problems.append(f"{f['title']}の開催日を公式サイト（{f['urls'][0]}）から読み取れませんでした。"
+                            f"例年は{f['months'][0]}月です。発表がまだか、サイトの書き方が変わった可能性があります")
+    return found, notes, problems
+
+
 def _hm(t: str) -> str:
     m = re.match(r"(\d{1,2})時(?:(\d{1,2})分)?", t)
     return f"{int(m.group(1))}:{int(m.group(2) or 0):02d}" if m else ""
@@ -487,7 +570,14 @@ def kotodai(prev: dict, ctx: Ctx) -> dict:
     tmin = min(e["date_start"] for e in table)
     regular = table + [e for e in prev_ev if not e.get("big") and e["date_start"] < tmin]
 
-    big_new = []
+    big_new, problems = [], []
+    try:                                           # (d) 定禅寺通りの大きな祭り（公式サイト・AIなし）を先に入れる
+        fest, fnotes, problems = festivals(ctx)
+        big_new += fest
+        notes += fnotes
+    except Exception as e:  # noqa: BLE001
+        notes.append(f"祭りの公式サイトを読めませんでした（{type(e).__name__}）")
+        log.warning("kotodai (d): %s", e)
     if ctx.today.month in (10, 11, 12):           # (b) 光のページェント
         try:
             text = ""
@@ -535,7 +625,7 @@ def kotodai(prev: dict, ctx: Ctx) -> dict:
         big.append(e)
     big += [p for p in prev_ev if p.get("big") and not any(same_event(p, b) for b in big)
             and not any(same_event(p, r) for r in regular)]
-    return {"events": regular + big, "message": " / ".join(notes)}
+    return {"events": regular + big, "message": " / ".join(notes), "problems": problems}
 
 
 # ---------------------------------------------------------------- 一番町健診クリニック
