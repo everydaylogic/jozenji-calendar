@@ -283,6 +283,19 @@ footer .thmenu{left:0;right:auto}
 .dayg:not(.tmr) .arow .when{font-size:12px;color:var(--muted)}
 .dayg:not(.tmr) .arow .name{font-size:13px;color:var(--sub)}
 .dayg:not(.tmr) .arow .vn{font-size:11px}
+
+/* 1週間の健診の色：今日の欄・月間と同じ意味（緑＝午前・午後、黄＝午前のみ、灰＝休診）。明後日以降は控えめ、明日ははっきり */
+.dayh .cl b{font-weight:400}
+.dayh .cl .full{color:#5c9e6c}
+.dayh .cl .am{color:#b89548}
+.dayg.tmr .dayh .cl .full{color:#6cc47e;font-weight:700}
+.dayg.tmr .dayh .cl .am{color:#e6b84c;font-weight:700}
+[data-theme="light"] .dayh .cl .full{color:#4a8a5a}
+[data-theme="light"] .dayh .cl .am{color:#a37a2a}
+[data-theme="light"] .dayg.tmr .dayh .cl .full{color:#2b8a3e}
+[data-theme="light"] .dayg.tmr .dayh .cl .am{color:#a86400}
+/* 祝日名 */
+.dayh .hol{font-size:12px;font-weight:400}
 </style>
 </head>
 <body>
@@ -347,6 +360,38 @@ footer .thmenu{left:0;right:auto}
   }
   const pad = n => String(n).padStart(2, '0');
   const iso = (y, m, d) => `${y}-${pad(m)}-${pad(d)}`;
+  // ===== 日本の祝日 =====
+  // 内閣府「国民の祝日」の決まりから計算する（外のデータに頼らない）。春分・秋分の日は1980〜2099年の近似式。
+  // 振替休日（祝日が日曜なら、次の祝日でない日）と、国民の休日（祝日にはさまれた平日）も含む
+  const holidayCache = {};
+  const dowOfIso = s => { const [y, m, d] = s.split('-').map(Number); return new Date(Date.UTC(y, m - 1, d)).getUTCDay(); };
+  function holidaysOf(y) {
+    if (holidayCache[y]) return holidayCache[y];
+    const H = {}, at = (m, d) => `${y}-${pad(m)}-${pad(d)}`;
+    const nthMonday = (m, n) => { const w = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(); return 1 + ((8 - w) % 7) + (n - 1) * 7; };
+    [[1, 1, '元日'], [2, 11, '建国記念の日'], [2, 23, '天皇誕生日'], [4, 29, '昭和の日'], [5, 3, '憲法記念日'], [5, 4, 'みどりの日'],
+     [5, 5, 'こどもの日'], [8, 11, '山の日'], [11, 3, '文化の日'], [11, 23, '勤労感謝の日']].forEach(([m, d, n]) => { H[at(m, d)] = n; });
+    H[at(1, nthMonday(1, 2))] = '成人の日';
+    H[at(7, nthMonday(7, 3))] = '海の日';
+    H[at(9, nthMonday(9, 3))] = '敬老の日';
+    H[at(10, nthMonday(10, 2))] = 'スポーツの日';
+    const k = Math.floor((y - 1980) / 4);
+    H[at(3, Math.floor(20.8431 + 0.242194 * (y - 1980)) - k)] = '春分の日';
+    H[at(9, Math.floor(23.2488 + 0.242194 * (y - 1980)) - k)] = '秋分の日';
+    Object.keys(H).forEach(d => {   // 国民の休日
+      const mid = addDays(d, 1);
+      if (!H[mid] && H[addDays(d, 2)] && dowOfIso(mid) !== 0) H[mid] = '国民の休日';
+    });
+    Object.keys(H).sort().forEach(d => {   // 振替休日
+      if (dowOfIso(d) !== 0) return;
+      let x = addDays(d, 1);
+      while (H[x]) x = addDays(x, 1);
+      H[x] = '振替休日';
+    });
+    return (holidayCache[y] = H);
+  }
+  const holidayName = ds => holidaysOf(+ds.slice(0, 4))[ds] || '';
+
   function addDays(isoDate, n) {
     const [y, m, d] = isoDate.split('-').map(Number);
     const t = new Date(Date.UTC(y, m - 1, d + n));
@@ -518,7 +563,9 @@ footer .thmenu{left:0;right:auto}
     const total = timed.length + ongoing.length;
     renderWx(today, n);
     renderClinic(today, n);
-    document.getElementById('w').textContent = data ? `${WEEK[n.wd]}曜日 · 今日の予定 ${total}件` : `${WEEK[n.wd]}曜日`;
+    const hol = holidayName(today);
+    const wtxt = `${WEEK[n.wd]}曜日${hol ? `（${hol}）` : ''}`;
+    document.getElementById('w').textContent = data ? `${wtxt} · 今日の予定 ${total}件` : wtxt;
 
     const badges = document.getElementById('badges');
     badges.textContent = '';
@@ -756,7 +803,7 @@ footer .thmenu{left:0;right:auto}
   }
 
   // これからの1週間（明日〜6日後）。日ごとに、その日に始まる予定を並べる
-  const CL_TEXT = { open: '午前・午後', pm_closed: '午前のみ', closed: '休診' };
+  const CL_WORD = { full: '午前・午後', am: '午前のみ', shut: '休診' };
   const SHORT = { rensa: 'Rensa', 'miyagi-hall': 'エレクトロンホール', mitsukoshi: '三越', kotodai: '勾当台公園' };
   const shortVenue = (sid, S) => SHORT[sid] || (S[sid] || {}).name || '';
   function renderAhead(today) {
@@ -773,12 +820,18 @@ footer .thmenu{left:0;right:auto}
       const [y, m, d] = day.split('-').map(Number);
       const wd = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
       const g = el('div', 'dayg' + (k === 1 ? ' tmr' : ''));   // 明日は大きく、明後日以降は控えめに
-      const hd = el('div', 'dayh' + (wd === 0 ? ' sun' : wd === 6 ? ' sat' : ''), `${k === 1 ? '明日 ' : ''}${m}/${d}（${WEEK[wd]}）`);
+      const hol = holidayName(day);
+      const hd = el('div', 'dayh' + (wd === 0 || hol ? ' sun' : wd === 6 ? ' sat' : ''), `${k === 1 ? '明日 ' : ''}${m}/${d}（${WEEK[wd]}）`);
+      if (hol) hd.append(el('span', 'hol', hol));
       const st = c && c.days && c.days[day];
       if (st && st.some(Boolean)) {
         const cl = el('span', 'cl');
-        const parts = st.map((s, i) => `${(c.floors[i] || '').replace(/（.*/, '').replace('性', '')} ${s === 'pm_closed' || (s === 'open' && wd === 6) ? '午前のみ' : CL_TEXT[s] || '－'}`);
-        cl.append(el('span', '', '健診 '), document.createTextNode(parts.join(' · ')));
+        cl.append(el('span', '', '健診 '));
+        st.forEach((s, i) => {
+          const kind = s === 'open' && wd !== 6 ? 'full' : (s === 'open' || s === 'pm_closed') ? 'am' : 'shut';
+          if (i) cl.append(document.createTextNode(' · '));
+          cl.append(document.createTextNode((c.floors[i] || '').replace(/（.*/, '').replace('性', '') + ' '), el('b', kind, CL_WORD[kind]));
+        });
         if (st.every(s => s === 'closed')) { cl.className = 'cl off'; cl.textContent = '健診 休診'; }
         hd.append(cl);
       }
