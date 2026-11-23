@@ -1,0 +1,33 @@
+name: 確認用（あとで消す）
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for m in 0801 0802 0803 0804 0805 0806 0807 0808 0809 0810 0811 0812 0901 0905; do
+            U=https://www.pref.miyagi.jp/site/event/kankouevent-r$m.html
+            code=$(curl -s -o p.html -w '%{http_code}' -A 'Mozilla/5.0' $U)
+            n=$(grep -o '<h[234][^>]*>[^<]*' p.html | wc -l)
+            hits=$(grep -o -E 'ジャズフェスティバル|青葉まつり|YOSAKOI|ページェント|七夕|定禅寺|勾当台' p.html | sort | uniq -c | tr '\n' ' ')
+            echo "r$m $code h=$n | $hits"
+          done
+          echo ---- r0809 jazz section
+          curl -s -A 'Mozilla/5.0' https://www.pref.miyagi.jp/site/event/kankouevent-r0809.html | python3 -c "
+          import sys,re,html
+          t=re.sub(r'<[^>]+>',' ',sys.stdin.read()); t=html.unescape(re.sub(r'\s+',' ',t))
+          for k in ['ジャズ','YOSAKOI','定禅寺']:
+            i=t.find(k)
+            if i>=0: print(k,'::',t[max(0,i-150):i+250]); print()
+          "
+          echo ---- r0810 yosakoi
+          curl -s -A 'Mozilla/5.0' https://www.pref.miyagi.jp/site/event/kankouevent-r0810.html | python3 -c "
+          import sys,re,html
+          t=re.sub(r'<[^>]+>',' ',sys.stdin.read()); t=html.unescape(re.sub(r'\s+',' ',t))
+          i=t.find('YOSAKOI')
+          print(t[max(0,i-150):i+300] if i>=0 else 'none')
+          "
+          echo ---- index
+          curl -s -A 'Mozilla/5.0' https://www.pref.miyagi.jp/site/event/ | grep -o 'kankouevent-r[0-9]*\.html' | sort -u | tr '\n' ' '
+          echo
+          for u in https://www.j-streetjazz.com/ https://www.aoba-matsuri.com/ https://michinoku-yosakoi.net/ https://www.michinoku-yosakoi.net/; do echo "$u $(curl -s -o /dev/null -w '%{http_code}' -L -A 'Mozilla/5.0' $u)"; done
