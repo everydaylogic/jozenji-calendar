@@ -327,6 +327,8 @@ footer .thmenu{left:0;right:auto}
   const SCROLL_MQ = '(max-width: 600px), (orientation: landscape) and (max-height: 520px)';
   const PAGE_SEC = 12;             // 1画面に収まらないときの切り替え間隔（秒）
   const NIGHT = [23, 6];           // この時間帯は画面を暗くする（時）
+  // 夜に暗くするか。タブレットの置きっぱなし用だった機能。各自のスマホで見る使い方になったので止めている（true で戻る）
+  const DIM_AT_NIGHT = false;
   const DAILY_RELOAD_HOUR = 4;     // 毎日この時刻にページを読み直す（時）
   const CACHE_KEY = 'jozenji-events-v1';
   // 天気：気象庁の宮城県の予報。天気・降水確率は「東部」、気温は「仙台」
@@ -559,7 +561,7 @@ footer .thmenu{left:0;right:auto}
     const today = iso(n.y, n.mo, n.d);
     const nowMin = n.h * 60 + n.mi;
     document.getElementById('clock').textContent = `${n.h}:${pad(n.mi)}`;
-    document.body.classList.toggle('night', NIGHT[0] > NIGHT[1] ? (n.h >= NIGHT[0] || n.h < NIGHT[1]) : (n.h >= NIGHT[0] && n.h < NIGHT[1]));
+    document.body.classList.toggle('night', DIM_AT_NIGHT && (NIGHT[0] > NIGHT[1] ? (n.h >= NIGHT[0] || n.h < NIGHT[1]) : (n.h >= NIGHT[0] && n.h < NIGHT[1])));
     // 中身は日付・分単位の状態が変わったときだけ作り直す
     const key = `${today}|${Math.floor(nowMin / 5)}|${data ? data.generated_at : ''}|${fetchFailed}|${wx ? wx.published : ''}|${obs ? obs.at : ''}`;
     if (!force && key === lastKey) return;

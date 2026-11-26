@@ -226,6 +226,7 @@ footer #status{display:none}
   const DATA_URL = 'events.json';
   const IDLE_BACK_SEC = 120;       // 表示板として使っているとき、触らなければ今日の画面に戻るまでの秒数
   const NIGHT = [23, 6];
+  const DIM_AT_NIGHT = false;   // 夜に暗くするか（今日の画面と同じく止めている。true で戻る）
   const CACHE_KEY = 'jozenji-events-v1';
   const WD = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -497,7 +498,7 @@ footer #status{display:none}
   function renderAll() {
     const n = nowJST();
     today = iso(n.y, n.mo, n.d);
-    document.body.classList.toggle('night', n.h >= NIGHT[0] || n.h < NIGHT[1]);
+    document.body.classList.toggle('night', DIM_AT_NIGHT && (n.h >= NIGHT[0] || n.h < NIGHT[1]));
     if (!data) { document.getElementById('detail').textContent = '予定を読み込めません。Wi-Fiの接続を確認してください'; return; }
     SRC = Object.fromEntries(data.sources.map(s => [s.id, s]));
     months = buildMonths();
