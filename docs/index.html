@@ -888,9 +888,12 @@ footer .thmenu{left:0;right:auto}
     render(true);
   }
 
-  // 画面が消えないようにする（対応していない環境では何もしない）
+  // 画面が消えないようにする（対応していない環境では何もしない）。
+  // タブレットの置きっぱなし用だった機能。各自のスマホで見る使い方になったので止めている（true で戻る）
+  const KEEP_AWAKE = false;
   let lock = null;
   async function keepAwake() {
+    if (!KEEP_AWAKE) return;
     try { if ('wakeLock' in navigator && document.visibilityState === 'visible') lock = await navigator.wakeLock.request('screen'); } catch (_) {}
   }
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { keepAwake(); load(); loadWx(); } });
